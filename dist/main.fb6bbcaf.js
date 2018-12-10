@@ -104,9 +104,101 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   // Override the current require with this new one
   return newRequire;
-})({"js/main.js":[function(require,module,exports) {
+})({"js/route.js":[function(require,module,exports) {
 'use strict';
-},{}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+
+function Route(name, template, isHome) {
+  this.name = name;
+  this.template = template;
+  this.isHome = isHome;
+}
+
+Route.prototype.isActive = function (name) {
+  return name.replace("#", "") === this.name;
+};
+
+function init(name, template, isHome) {
+  return new Route(name, template, isHome);
+}
+
+module.exports = {
+  init: init
+};
+},{}],"js/router.js":[function(require,module,exports) {
+'use strict';
+
+function Router(routes) {
+  this.routes = routes;
+  this.root = document.getElementById("app");
+  this.init();
+}
+
+Router.prototype.init = function () {
+  (function (scope, routes) {
+    window.addEventListener("hashchange", function () {
+      scope.onPageChange(scope, routes);
+    });
+  })(this, this.routes);
+
+  this.onPageChange(this, this.routes);
+};
+
+Router.prototype.onPageChange = function (scope, routes) {
+  // if going to different page
+  if (window.location.hash.length > 0) {
+    for (var i = 0; i < routes.length; i++) {
+      var route = routes[i];
+
+      if (route.isActive(window.location.hash.substr(1))) {
+        scope.goToRoute(route.template);
+      }
+    } // else go to home page
+
+  } else {
+    for (var _i = 0; _i < routes.length; _i++) {
+      var _route = routes[_i];
+
+      if (_route.isHome) {
+        scope.goToRoute(_route.template);
+      }
+    }
+  }
+};
+
+Router.prototype.goToRoute = function (html) {
+  (function (scope) {
+    var url = "pages/".concat(html);
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function () {
+      if (this.readyState === 4 && this.status === 200) {
+        scope.root.innerHTML = this.responseText;
+      }
+    };
+
+    xhttp.open("GET", url, true);
+    xhttp.send();
+  })(this);
+};
+
+function init(routes) {
+  return new Router(routes);
+}
+
+module.exports = {
+  init: init
+};
+},{}],"js/main.js":[function(require,module,exports) {
+'use strict';
+
+var r = require('./route');
+
+var rt = require('./router');
+
+(function init() {
+  var router = new rt.init([new r.init("user", "user.html", true), new r.init("budget", "budget.html"), new r.init("transaction", "transaction.html")]);
+})();
+},{"./route":"js/route.js","./router":"js/router.js"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -133,7 +225,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54125" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55867" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

@@ -12,5 +12,6 @@
   "license": "ISC",
   "devDependencies": {
     "parcel": "^1.10.3"
-  }
+  },
+  "dependencies": {}
 }
