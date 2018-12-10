@@ -104,101 +104,83 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   // Override the current require with this new one
   return newRequire;
-})({"js/route.js":[function(require,module,exports) {
-'use strict';
+})({"../node_modules/parcel/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
 
-function Route(name, template, isHome) {
-  this.name = name;
-  this.template = template;
-  this.isHome = isHome;
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
+  }
+
+  return bundleURL;
 }
 
-Route.prototype.isActive = function (name) {
-  return name.replace("#", "") === this.name;
-};
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp):\/\/[^)\n]+/g);
 
-function init(name, template, isHome) {
-  return new Route(name, template, isHome);
-}
-
-module.exports = {
-  init: init
-};
-},{}],"js/router.js":[function(require,module,exports) {
-'use strict';
-
-function Router(routes) {
-  this.routes = routes;
-  this.root = document.getElementById("app");
-  this.init();
-}
-
-Router.prototype.init = function () {
-  (function (scope, routes) {
-    window.addEventListener("hashchange", function () {
-      scope.onPageChange(scope, routes);
-    });
-  })(this, this.routes);
-
-  this.onPageChange(this, this.routes);
-};
-
-Router.prototype.onPageChange = function (scope, routes) {
-  // if going to different page
-  if (window.location.hash.length > 0) {
-    for (var i = 0; i < routes.length; i++) {
-      var route = routes[i];
-
-      if (route.isActive(window.location.hash.substr(1))) {
-        scope.goToRoute(route.template);
-      }
-    } // else go to home page
-
-  } else {
-    for (var _i = 0; _i < routes.length; _i++) {
-      var _route = routes[_i];
-
-      if (_route.isHome) {
-        scope.goToRoute(_route.template);
-      }
+    if (matches) {
+      return getBaseURL(matches[0]);
     }
   }
-};
 
-Router.prototype.goToRoute = function (html) {
-  (function (scope) {
-    var url = "pages/".concat(html);
-    var xhttp = new XMLHttpRequest();
-
-    xhttp.onreadystatechange = function () {
-      if (this.readyState === 4 && this.status === 200) {
-        scope.root.innerHTML = this.responseText;
-      }
-    };
-
-    xhttp.open("GET", url, true);
-    xhttp.send();
-  })(this);
-};
-
-function init(routes) {
-  return new Router(routes);
+  return '/';
 }
 
-module.exports = {
-  init: init
-};
-},{}],"js/main.js":[function(require,module,exports) {
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp):\/\/.+)\/[^/]+$/, '$1') + '/';
+}
+
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"../node_modules/parcel/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
+
+function updateLink(link) {
+  var newLink = link.cloneNode();
+
+  newLink.onload = function () {
+    link.remove();
+  };
+
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+
+var cssTimeout = null;
+
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
+  }
+
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
+      }
+    }
+
+    cssTimeout = null;
+  }, 50);
+}
+
+module.exports = reloadCSS;
+},{"./bundle-url":"../node_modules/parcel/src/builtins/bundle-url.js"}],"css/main.scss":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../node_modules/parcel/src/builtins/css-loader.js"}],"js/main.js":[function(require,module,exports) {
 'use strict';
 
-var r = require('./route');
-
-var rt = require('./router');
-
-(function init() {
-  var router = new rt.init([new r.init("user", "user.html", true), new r.init("budget", "budget.html"), new r.init("transaction", "transaction.html")]);
-})();
-},{"./route":"js/route.js","./router":"js/router.js"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+require("../css/main.scss");
+},{"../css/main.scss":"css/main.scss"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -225,7 +207,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55867" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61257" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
