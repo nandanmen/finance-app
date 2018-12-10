@@ -24,13 +24,29 @@ body {
   color: #3c3e3b;
   z-index: 0; }
 
+/**
+ * This file contains all classes that may
+ * be used by multiple pages/components.
+ */
 #app {
   background-color: #f2f2f2;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center; }
+
+.clickable {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1; }
+
+h1 {
+  line-height: 1.2; }
 
 .login {
   background-color: #028090;
@@ -53,16 +69,91 @@ body {
   border-radius: 1rem;
   position: relative; }
 
-.clickable {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: 1; }
-
 .icon {
   background-color: #f2f2f2;
   width: 4rem;
   height: 4rem;
   border-radius: 50%; }
+
+.app--dash {
+  padding: 5rem 0;
+  justify-content: flex-start; }
+
+.remainder {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; }
+
+.remainder--amount {
+  font-family: "Source Code Pro", monospace;
+  font-size: 2.5rem; }
+
+.remainder--caption {
+  text-align: right;
+  font-size: 0.7rem; }
+
+.category {
+  position: relative;
+  width: 70vw;
+  height: 12rem;
+  margin: 1.5rem 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center; }
+
+.category__graph {
+  position: absolute;
+  left: 0;
+  background-color: white;
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%; }
+
+.category__legend {
+  list-style: none;
+  color: #f2f2f2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  background: #028090;
+  height: 100%;
+  width: 80%;
+  border-radius: 1rem;
+  padding: 0 4rem; }
+
+.transactions {
+  position: relative;
+  margin: 3rem 0 0 0;
+  width: 70vw;
+  list-style: none; }
+  .transactions:before {
+    content: 'Recent Transactions';
+    position: absolute;
+    left: 0;
+    top: -2rem; }
+
+.transaction {
+  font-family: "Source Code Pro", monospace;
+  font-size: 0.9rem;
+  width: 100%;
+  padding: 0.2rem 0.6rem;
+  display: flex;
+  align-items: center;
+  background: #028090;
+  color: #f2f2f2;
+  border-radius: 0.5em;
+  margin-bottom: 0.5rem; }
+  .transaction:last-child {
+    margin-bottom: 0; }
+
+.transaction__date {
+  flex-grow: 0; }
+
+.transaction__vendor {
+  padding-left: 1.5rem;
+  flex-grow: 1;
+  line-height: 1.2; }
+
+.transaction__amount {
+  flex-grow: 0; }

@@ -1,0 +1,27 @@
+/**
+ * This file contains all classes that may
+ * be used by multiple pages/components.
+ */
+
+#app {
+    background-color: $c-bkg-0;
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.clickable {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+h1 {
+    line-height: 1.2;
+}

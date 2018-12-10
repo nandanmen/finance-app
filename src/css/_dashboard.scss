@@ -1,0 +1,96 @@
+.app--dash {
+    padding: 5rem 0;
+    justify-content: flex-start;
+}
+
+.remainder {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.remainder--amount {
+    font-family: $f-mono;
+    font-size: 2.5rem;
+}
+
+.remainder--caption {
+    text-align: right;
+    font-size: 0.7rem;
+}
+
+.category {
+    position: relative;
+    width: 70vw;
+    height: 12rem;
+    margin: 1.5rem 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.category__graph {
+    position:absolute;
+    left: 0;
+    background-color: white;
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+}
+
+.category__legend {
+    list-style: none;
+    color: $c-bkg-0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    background: $c-bkg-1;
+    height: 100%;
+    width: 80%;
+    border-radius: 1rem;
+    padding: 0 4rem;
+}
+
+.transactions {
+    position: relative;
+    margin: 3rem 0 0 0;
+    width: 70vw;
+    list-style: none;
+    &:before {
+        content: 'Recent Transactions';
+        position: absolute;
+        left: 0;
+        top: -2rem;
+    }
+}
+
+.transaction {
+    font-family: $f-mono;
+    font-size: 0.9rem;
+    width: 100%;
+    padding: 0.2rem 0.6rem;
+    display: flex;
+    align-items: center;
+    background: $c-bkg-1;
+    color: $c-bkg-0;
+    border-radius: 0.5em;
+    margin-bottom: 0.5rem;
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.transaction__date {
+    flex-grow: 0;
+}
+
+.transaction__vendor {
+    padding-left: 1.5rem;
+    flex-grow: 1;
+    line-height: 1.2;
+}
+
+.transaction__amount {
+    flex-grow: 0;
+}
