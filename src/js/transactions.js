@@ -1,6 +1,7 @@
 'use strict'
 
-import { categories } from "./categories";
+import { categories } from './categories';
+import { Transaction } from './transaction'
 
 let transactions;
 
