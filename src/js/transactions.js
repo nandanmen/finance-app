@@ -1,6 +1,6 @@
 'use strict'
 
-import { categories } from './categories';
+import { Categories } from './categories';
 import { Transaction } from './transaction'
 
 export default class Transactions {
@@ -10,9 +10,12 @@ export default class Transactions {
 
     /**
      * 
-     * @param {Transaction} transaction 
+     * @param {String} date 
+     * @param {String} vendor 
+     * @param {Number} amount 
+     * @param {String} category 
      */
-    add(transaction) {
+    add(date, vendor, amount, category) {
 
     }
 
@@ -27,10 +30,18 @@ export default class Transactions {
     /**
      * 
      * @param {Transaction} transaction 
-     * @param {String[]} values 
+     * @param {Object} values 
      */
     edit(transaction, values) {
 
+    }
+
+    /**
+     * 
+     * @param {Object} options 
+     */
+    getTransactions(options) {
+        
     }
 
     /**

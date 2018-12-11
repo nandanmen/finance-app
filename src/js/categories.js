@@ -1,5 +1,5 @@
 'use strict'
 
-let categories = [];
-
-export { categories };
+export default class Categories {
+    
+}

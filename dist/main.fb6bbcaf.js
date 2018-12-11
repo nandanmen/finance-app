@@ -182,9 +182,15 @@ module.hot.accept(reloadCSS);
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.categories = void 0;
-var categories = [];
-exports.categories = categories;
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Categories = function Categories() {
+  _classCallCheck(this, Categories);
+};
+
+exports.default = Categories;
 },{}],"js/transaction.js":[function(require,module,exports) {
 'use strict';
 /**
@@ -258,13 +264,16 @@ function () {
   }
   /**
    * 
-   * @param {Transaction} transaction 
+   * @param {String} date 
+   * @param {String} vendor 
+   * @param {Number} amount 
+   * @param {String} category 
    */
 
 
   _createClass(Transactions, [{
     key: "add",
-    value: function add(transaction) {}
+    value: function add(date, vendor, amount, category) {}
     /**
      * 
      * @param {Transaction} transaction 
@@ -276,12 +285,20 @@ function () {
     /**
      * 
      * @param {Transaction} transaction 
-     * @param {String[]} values 
+     * @param {Object} values 
      */
 
   }, {
     key: "edit",
     value: function edit(transaction, values) {}
+    /**
+     * 
+     * @param {Object} options 
+     */
+
+  }, {
+    key: "getTransactions",
+    value: function getTransactions(options) {}
     /**
      * Renders the list of transactions onto the DOM node 
      * specified by target.
