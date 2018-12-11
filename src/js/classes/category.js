@@ -75,6 +75,14 @@ export default class Category {
 
     /**
      * 
+     * @param {*} id 
+     */
+    contains(id) {
+
+    }
+
+    /**
+     * 
      */
     getTotalExpenditure() {
 
