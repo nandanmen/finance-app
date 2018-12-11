@@ -185,48 +185,152 @@ Object.defineProperty(exports, "__esModule", {
 exports.categories = void 0;
 var categories = [];
 exports.categories = categories;
+},{}],"js/transaction.js":[function(require,module,exports) {
+'use strict';
+/**
+ * This class represents a transaction. A transaction
+ * consists of:
+ *      - the date of transaction
+ *      - the name of the vendor
+ *      - the amount in the transaction
+ *      - the category the transaction belongs to
+ */
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Transaction = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Transaction =
+/*#__PURE__*/
+function () {
+  function Transaction(date, vendor, amount, category) {
+    _classCallCheck(this, Transaction);
+
+    this.date = new Date(date);
+    this.vendor = vendor;
+    this.amount = amount;
+    this.category = category;
+  }
+
+  _createClass(Transaction, [{
+    key: "getDate",
+    value: function getDate() {
+      return "".concat(this.date.getDate(), "/").concat(this.date.getMonth() + 1);
+    }
+  }]);
+
+  return Transaction;
+}();
+
+exports.Transaction = Transaction;
 },{}],"js/transactions.js":[function(require,module,exports) {
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
 var _categories = require("./categories");
 
-var transactions;
-/**
- * Sets up event listeners and populates 
- * transactions array.
- */
+var _transaction = require("./transaction");
 
-function init() {
-  transactions = JSON.parse(localStorage.getItem("transactions"));
-  if (!transactions) transactions = [];
-}
-/**
- * 
- * @param {*} tr 
- */
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function add(tr) {}
-/**
- * 
- * @param {*} tr 
- */
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+var Transactions =
+/*#__PURE__*/
+function () {
+  function Transactions(transactions) {
+    _classCallCheck(this, Transactions);
 
-function remove(tr) {}
-/**
- * 
- * @param {*} tr 
- */
+    this.transactions = transactions;
+  }
+  /**
+   * 
+   * @param {Transaction} transaction 
+   */
 
 
-function edit(tr) {}
-},{"./categories":"js/categories.js"}],"js/main.js":[function(require,module,exports) {
+  _createClass(Transactions, [{
+    key: "add",
+    value: function add(transaction) {}
+    /**
+     * 
+     * @param {Transaction} transaction 
+     */
+
+  }, {
+    key: "remove",
+    value: function remove(transaction) {}
+    /**
+     * 
+     * @param {Transaction} transaction 
+     * @param {String[]} values 
+     */
+
+  }, {
+    key: "edit",
+    value: function edit(transaction, values) {}
+    /**
+     * Renders the list of transactions onto the DOM node 
+     * specified by target.
+     * @param {Node} target the node to append the rendered 
+     *                      elements to.
+     */
+
+  }, {
+    key: "render",
+    value: function render(target) {
+      var template = document.getElementById("template--transaction");
+      this.transactions.forEach(function (transaction) {
+        var date = template.content.querySelector(".transaction__date");
+        var dateText = document.createTextNode(transaction.getDate());
+        date.appendChild(dateText);
+        var vendor = template.content.querySelector(".transaction__vendor");
+        var vendorText = document.createTextNode(transaction.vendor);
+        vendor.appendChild(vendorText);
+        var amount = template.content.querySelector(".transaction__amount");
+        var amountNum = document.createTextNode(transaction.amount);
+        amount.appendChild(amountNum);
+        var toMount = document.importNode(template.content, true);
+        target.appendChild(toMount);
+      });
+    }
+  }]);
+
+  return Transactions;
+}();
+
+exports.default = Transactions;
+},{"./categories":"js/categories.js","./transaction":"js/transaction.js"}],"js/main.js":[function(require,module,exports) {
 'use strict';
 
 require("./../css/main.scss");
 
-require("./transactions");
+var _transactions = _interopRequireDefault(require("./transactions"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function main() {
+  var transactions = JSON.parse(localStorage.getItem('transactions'));
+  if (!transactions) transactions = [];
+  var transList = new _transactions.default(transactions);
+  var transContainer = document.querySelector('.transactions');
+  transList.render(transContainer);
+}
+
+main();
 },{"./../css/main.scss":"css/main.scss","./transactions":"js/transactions.js"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';

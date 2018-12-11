@@ -3,37 +3,59 @@
 import { categories } from './categories';
 import { Transaction } from './transaction'
 
-let transactions;
+export default class Transactions {
+    constructor(transactions) {
+        this.transactions = transactions;
+    }
 
-/**
- * Sets up event listeners and populates 
- * transactions array.
- */
-function init() {
-    transactions = JSON.parse(localStorage.getItem("transactions"));
-    if (!transactions) transactions = [];
-}
+    /**
+     * 
+     * @param {Transaction} transaction 
+     */
+    add(transaction) {
 
-/**
- * 
- * @param {*} tr 
- */
-function add(tr) {
+    }
 
-}
+    /**
+     * 
+     * @param {Transaction} transaction 
+     */
+    remove(transaction) {
 
-/**
- * 
- * @param {*} tr 
- */
-function remove(tr) {
+    }
 
-}
+    /**
+     * 
+     * @param {Transaction} transaction 
+     * @param {String[]} values 
+     */
+    edit(transaction, values) {
 
-/**
- * 
- * @param {*} tr 
- */
-function edit(tr) {
+    }
 
+    /**
+     * Renders the list of transactions onto the DOM node 
+     * specified by target.
+     * @param {Node} target the node to append the rendered 
+     *                      elements to.
+     */
+    render(target) {
+        const template = document.getElementById("template--transaction");
+        this.transactions.forEach(transaction => {
+            const date = template.content.querySelector(".transaction__date");
+            const dateText = document.createTextNode(transaction.getDate());
+            date.appendChild(dateText);
+
+            const vendor = template.content.querySelector(".transaction__vendor");
+            const vendorText = document.createTextNode(transaction.vendor);
+            vendor.appendChild(vendorText);
+
+            const amount = template.content.querySelector(".transaction__amount");
+            const amountNum = document.createTextNode(transaction.amount);
+            amount.appendChild(amountNum);
+
+            const toMount = document.importNode(template.content, true);
+            target.appendChild(toMount);
+        });
+    }
 }
