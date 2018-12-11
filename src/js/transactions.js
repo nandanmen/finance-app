@@ -1,7 +1,13 @@
 'use strict'
 
-import { Categories } from './categories';
-import { Transaction } from './transaction'
+import Categories from './categories';
+import Transaction from './transaction';
+
+/**
+ * This class represents a list of Transaction
+ * objects. Allows for searching of transactions,
+ * addition and removal of transactions.
+ */
 
 export default class Transactions {
     constructor(transactions) {

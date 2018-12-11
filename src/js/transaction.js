@@ -9,7 +9,7 @@
  *      - the category the transaction belongs to
  */
 
-export class Transaction {
+export default class Transaction {
     constructor(date, vendor, amount, category) {
         this.date = new Date(date);
         this.vendor = vendor;

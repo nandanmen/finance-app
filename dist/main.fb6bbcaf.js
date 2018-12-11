@@ -191,7 +191,26 @@ var Categories = function Categories() {
 };
 
 exports.default = Categories;
-},{}],"js/transaction.js":[function(require,module,exports) {
+},{}],"js/budget.js":[function(require,module,exports) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _categories = _interopRequireDefault(require("./categories"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Budget = function Budget() {
+  _classCallCheck(this, Budget);
+};
+
+exports.default = Budget;
+},{"./categories":"js/categories.js"}],"js/transaction.js":[function(require,module,exports) {
 'use strict';
 /**
  * This class represents a transaction. A transaction
@@ -205,7 +224,7 @@ exports.default = Categories;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Transaction = void 0;
+exports.default = void 0;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -235,7 +254,7 @@ function () {
   return Transaction;
 }();
 
-exports.Transaction = Transaction;
+exports.default = Transaction;
 },{}],"js/transactions.js":[function(require,module,exports) {
 'use strict';
 
@@ -244,9 +263,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _categories = require("./categories");
+var _categories = _interopRequireDefault(require("./categories"));
 
-var _transaction = require("./transaction");
+var _transaction = _interopRequireDefault(require("./transaction"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -254,6 +275,11 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+/**
+ * This class represents a list of Transaction
+ * objects. Allows for searching of transactions,
+ * addition and removal of transactions.
+ */
 var Transactions =
 /*#__PURE__*/
 function () {
@@ -330,12 +356,43 @@ function () {
 }();
 
 exports.default = Transactions;
-},{"./categories":"js/categories.js","./transaction":"js/transaction.js"}],"js/main.js":[function(require,module,exports) {
+},{"./categories":"js/categories.js","./transaction":"js/transaction.js"}],"js/user.js":[function(require,module,exports) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _categories = _interopRequireDefault(require("./categories"));
+
+var _transactions = _interopRequireDefault(require("./transactions"));
+
+var _budget = _interopRequireDefault(require("./budget"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var User = function User() {
+  _classCallCheck(this, User);
+};
+
+exports.default = User;
+},{"./categories":"js/categories.js","./transactions":"js/transactions.js","./budget":"js/budget.js"}],"js/main.js":[function(require,module,exports) {
 'use strict';
 
 require("./../css/main.scss");
 
+var _categories = _interopRequireDefault(require("./categories"));
+
+var _budget = _interopRequireDefault(require("./budget"));
+
 var _transactions = _interopRequireDefault(require("./transactions"));
+
+var _transaction = _interopRequireDefault(require("./transaction"));
+
+var _user = _interopRequireDefault(require("./user"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -348,7 +405,7 @@ function main() {
 }
 
 main();
-},{"./../css/main.scss":"css/main.scss","./transactions":"js/transactions.js"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./../css/main.scss":"css/main.scss","./categories":"js/categories.js","./budget":"js/budget.js","./transactions":"js/transactions.js","./transaction":"js/transaction.js","./user":"js/user.js"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
