@@ -16,21 +16,26 @@ export default class Category {
     }
 
     /**
-     * 
-     * @param {*} date 
-     * @param {*} vendor 
-     * @param {*} amount 
+     * Adds a new transaction made with the given
+     * parameters into this category.
+     * @param {String} date 
+     * @param {String} vendor 
+     * @param {Number} amount 
      */
     add(date, vendor, amount) {
+        let id = Math.random() * 65536;
+        while (this.transactions.has(id)) id++;
 
+        const toAdd = new Transaction(date, vendor, amount);
+        this.transactions.set(id, toAdd);
     }
 
     /**
-     * 
-     * @param {*} id 
+     * Removes the transaction with id from this category.
+     * @param {Number} id 
      */
     remove(id) {
-
+        this.transactions.delete(id);
     }
 
     /**

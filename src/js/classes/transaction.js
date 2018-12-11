@@ -9,8 +9,7 @@
  */
 
 export default class Transaction {
-    constructor(id, date, vendor, amount) {
-        this.id = id;
+    constructor(date, vendor, amount) {
         this.date = new Date(date);
         this.vendor = vendor;
         this.amount = amount;
