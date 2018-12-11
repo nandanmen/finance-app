@@ -39,74 +39,92 @@ export default class Category {
     }
 
     /**
-     * 
-     * @param {*} id 
-     * @param {*} options 
+     * Edits the transaction with given id based on the
+     * parameters set by the options object.
+     * @param {Number} id 
+     * @param {Object} options 
      */
     edit(id, options) {
 
     }
 
     /**
-     * 
+     * Returns all the transactions in this category
+     * as an array.
      */
     getTransactions() {
-
+        return [...this.transactions.entries()];
     }
 
     /**
-     * 
-     * @param {*} vendor 
+     * Returns all transactions in this category
+     * with vendor equal to the passed vendor.
+     * @param {String} vendor 
      */
     getByVendor(vendor) {
-
+        const transactions = this.getTransactions();
+        return transactions.filter(tr => tr.vendor === vendor);
     }
 
     /**
-     * 
-     * @param {*} date 
+     * Returns all transactions with date equal
+     * to the parameter date.
+     * @param {Date} date 
      */
     getByDate(date) {
-
+        const transactions = this.getTransactions();
+        return transactions.filter(tr => tr.date === date);
     }
 
     /**
-     * 
-     * @param {*} id 
+     * Return the transaction with the given id.
+     * @param {Number} id 
      */
     getById(id) {
-
+        return this.transactions.get(id);
     }
 
     /**
-     * 
-     * @param {*} id 
+     * Returns true if this category contains the
+     * transaction with the given id.
+     * @param {Number} id 
      */
     contains(id) {
-
+        return this.transactions.has(id);
     }
 
     /**
-     * 
+     * Returns the total expenditure for this category.
+     * The expenditure is defined as the sum of amounts of
+     * each transaction.
      */
     getTotalExpenditure() {
-
+        const transactions = this.getTransactions();
+        return transactions.reduce((acc, tr) => {
+            return acc + tr.amount;
+        }, 0);
     }
 
     /**
-     * 
-     * @param {*} date 
+     * Returns the total expenditure for a given date.
+     * @param {Date} date 
      */
     getExpenditureByDate(date) {
-
+        const transactions = this.getByDate(date);
+        return transactions.reduce((acc, tr) => {
+            return acc + tr.amount;
+        }, 0);
     }
 
     /**
-     * 
+     * Returns the total expenditure for a given vendor.
      * @param {*} vendor 
      */
     getExpenditureByVendor(vendor) {
-
+        const transactions = this.getByVendor(vendor);
+        return transactions.reduce((acc, tr) => {
+            return acc + tr.amount;
+        }, 0);
     }
 
     /**
