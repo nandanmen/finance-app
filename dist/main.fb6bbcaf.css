@@ -8,21 +8,24 @@
 * {
   box-sizing: border-box;
   padding: 0;
-  margin: 0; }
+  margin: 0;
+}
 
 html {
   text-rendering: optimizeLegibility;
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-kerning: auto; }
+  font-kerning: auto;
+}
 
 body {
   font-family: "SF Pro Text", "Open Sans", sans-serif;
   font-size: 16px;
   line-height: 1.618;
   color: #3c3e3b;
-  z-index: 0; }
+  z-index: 0;
+}
 
 /**
  * This file contains all classes that may
@@ -35,7 +38,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; }
+  justify-content: center;
+}
 
 .clickable {
   position: absolute;
@@ -43,10 +47,12 @@ body {
   height: 100%;
   top: 0;
   left: 0;
-  z-index: 1; }
+  z-index: 1;
+}
 
 h1 {
-  line-height: 1.2; }
+  line-height: 1.2;
+}
 
 .login {
   background-color: #028090;
@@ -56,41 +62,49 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center; }
+  align-items: center;
+}
 
 .login--input {
   color: #f2f2f2;
-  margin: 1rem 0; }
+  margin: 1rem 0;
+}
 
 .login--btn {
   background-color: #f2f2f2;
   width: 6rem;
   height: 1rem;
   border-radius: 1rem;
-  position: relative; }
+  position: relative;
+}
 
 .icon {
   background-color: #f2f2f2;
   width: 4rem;
   height: 4rem;
-  border-radius: 50%; }
+  border-radius: 50%;
+}
 
 .app--dash {
   padding: 5rem 0;
-  justify-content: flex-start; }
+  justify-content: flex-start;
+}
 
 .remainder {
   display: flex;
   flex-direction: column;
-  align-items: flex-end; }
+  align-items: flex-end;
+}
 
 .remainder--amount {
   font-family: "Source Code Pro", monospace;
-  font-size: 2.5rem; }
+  font-size: 2.5rem;
+}
 
 .remainder--caption {
   text-align: right;
-  font-size: 0.7rem; }
+  font-size: 0.7rem;
+}
 
 .category {
   position: relative;
@@ -99,7 +113,8 @@ h1 {
   margin: 1.5rem 0;
   display: flex;
   justify-content: flex-end;
-  align-items: center; }
+  align-items: center;
+}
 
 .category__graph {
   position: absolute;
@@ -107,7 +122,8 @@ h1 {
   background-color: white;
   width: 6rem;
   height: 6rem;
-  border-radius: 50%; }
+  border-radius: 50%;
+}
 
 .category__legend {
   list-style: none;
@@ -120,22 +136,26 @@ h1 {
   height: 100%;
   width: 80%;
   border-radius: 1rem;
-  padding: 0 4rem; }
+  padding: 0 4rem;
+}
 
 .transactions {
   position: relative;
   margin: 3rem 0 0 0;
   width: 70vw;
-  list-style: none; }
-  .transactions:before {
-    content: 'Recent Transactions';
-    position: absolute;
-    left: 0;
-    top: -2rem; }
+  list-style: none;
+}
+.transactions:before {
+  content: "Recent Transactions";
+  position: absolute;
+  left: 0;
+  top: -2rem;
+}
 
 .transactions__more {
   position: absolute;
-  right: 0; }
+  right: 0;
+}
 
 .transaction {
   font-family: "Source Code Pro", monospace;
@@ -147,17 +167,22 @@ h1 {
   background: #028090;
   color: #f2f2f2;
   border-radius: 0.5em;
-  margin-bottom: 0.5rem; }
-  .transaction:last-child {
-    margin-bottom: 0; }
+  margin-bottom: 0.5rem;
+}
+.transaction:last-child {
+  margin-bottom: 0;
+}
 
 .transaction__date {
-  flex-grow: 0; }
+  flex-grow: 0;
+}
 
 .transaction__vendor {
   padding-left: 1.5rem;
   flex-grow: 1;
-  line-height: 1.2; }
+  line-height: 1.2;
+}
 
 .transaction__amount {
-  flex-grow: 0; }
+  flex-grow: 0;
+}

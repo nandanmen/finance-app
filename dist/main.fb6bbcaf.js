@@ -176,11 +176,58 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../node_modules/parcel/src/builtins/css-loader.js"}],"js/main.js":[function(require,module,exports) {
+},{"_css_loader":"../node_modules/parcel/src/builtins/css-loader.js"}],"js/categories.js":[function(require,module,exports) {
 'use strict';
 
-require("../css/main.scss");
-},{"../css/main.scss":"css/main.scss"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.categories = void 0;
+var categories = [];
+exports.categories = categories;
+},{}],"js/transactions.js":[function(require,module,exports) {
+'use strict';
+
+var _categories = require("./categories");
+
+var transactions;
+/**
+ * Sets up event listeners and populates 
+ * transactions array.
+ */
+
+function init() {
+  transactions = JSON.parse(localStorage.getItem("transactions"));
+  if (!transactions) transactions = [];
+}
+/**
+ * 
+ * @param {*} tr 
+ */
+
+
+function add(tr) {}
+/**
+ * 
+ * @param {*} tr 
+ */
+
+
+function remove(tr) {}
+/**
+ * 
+ * @param {*} tr 
+ */
+
+
+function edit(tr) {}
+},{"./categories":"js/categories.js"}],"js/main.js":[function(require,module,exports) {
+'use strict';
+
+require("./../css/main.scss");
+
+require("./transactions");
+},{"./../css/main.scss":"css/main.scss","./transactions":"js/transactions.js"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -207,7 +254,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55920" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54286" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

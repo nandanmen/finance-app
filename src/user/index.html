@@ -5,8 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>User</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../css/main.css">
 </head>
 <body>
+    <template id="template--transaction">
+        <li class="transaction">
+            <p class="transaction__date"></p>
+            <p class="transaction__vendor"></p>
+            <p class="transaction__amount"></p>
+        </li>
+    </template>
     <main id="app" class="app--dash">
         <div class="remainder">
             <h1 class="remainder--amount">$2,500</h1>
@@ -21,28 +29,7 @@
                 <li>Car</li>
             </ul>
         </div>
-        <ul class="transactions">
-            <li class="transaction">
-                <p class="transaction__date">10/12</p>
-                <p class="transaction__vendor">Starbucks</p>
-                <p class="transaction__amount">$5.24</p>
-            </li>
-            <li class="transaction">
-                <p class="transaction__date">10/12</p>
-                <p class="transaction__vendor">Church's</p>
-                <p class="transaction__amount">$9.50</p>
-            </li>
-            <li class="transaction">
-                <p class="transaction__date">09/12</p>
-                <p class="transaction__vendor">Onezo Tapioca</p>
-                <p class="transaction__amount">$6.50</p>
-            </li>
-            <li class="transaction">
-                <p class="transaction__date">09/12</p>
-                <p class="transaction__vendor">Kokoro Mazesoba</p>
-                <p class="transaction__amount">$16.15</p>
-            </li>
-        </ul>
+        <ul class="transactions"></ul>
     </main>
     <script src="../js/main.js"></script>
 </body>
