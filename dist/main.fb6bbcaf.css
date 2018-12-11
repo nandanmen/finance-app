@@ -133,6 +133,10 @@ h1 {
     left: 0;
     top: -2rem; }
 
+.transactions__more {
+  position: absolute;
+  right: 0; }
+
 .transaction {
   font-family: "Source Code Pro", monospace;
   font-size: 0.9rem;

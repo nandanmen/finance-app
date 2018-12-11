@@ -65,6 +65,11 @@
     }
 }
 
+.transactions__more {
+    position: absolute;
+    right: 0;
+}
+
 .transaction {
     font-family: $f-mono;
     font-size: 0.9rem;
