@@ -3,7 +3,8 @@
 import Category from './category';
 
 /**
- * This class represents a budget.
+ * This class represents a budget. A budget
+ * is a set of Category objects.
  */
 
 export default class Budget {
@@ -12,6 +13,6 @@ export default class Budget {
     }
 
     render(target) {
-        
+
     }
 }

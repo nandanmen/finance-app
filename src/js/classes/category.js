@@ -3,10 +3,9 @@
 import Transaction from './transaction';
 
 /**
- * This class represents a category. A
- * category has a name, budgeted amount
- * and a list of transactions pertaining
- * to this category.
+ * This class represents a category. A category 
+ * has a name, budgeted amount and a list of 
+ * transactions pertaining to this category.
  */
 
 export default class Category {

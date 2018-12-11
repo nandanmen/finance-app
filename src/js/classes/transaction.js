@@ -28,14 +28,6 @@ export default class Transaction {
         this.date = new Date(newDate);
     }
 
-    setVendor(vendor) {
-        this.vendor = vendor;
-    }
-
-    setAmount(amount) {
-        this.amount = amount;
-    }
-
     /**
      * Renders this transaction onto the DOM
      * node specified by target.
