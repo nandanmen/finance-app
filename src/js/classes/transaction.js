@@ -6,15 +6,14 @@
  *      - the date of transaction
  *      - the name of the vendor
  *      - the amount in the transaction
- *      - the category the transaction belongs to
  */
 
 export default class Transaction {
-    constructor(date, vendor, amount, category) {
+    constructor(id, date, vendor, amount) {
+        this.id = id;
         this.date = new Date(date);
         this.vendor = vendor;
         this.amount = amount;
-        this.category = category;
     }
 
     /**
@@ -23,6 +22,18 @@ export default class Transaction {
      */
     getDate() {
         return `${this.date.getDate()}/${this.date.getMonth()+1}`;
+    }
+
+    setDate(newDate) {
+        this.date = new Date(newDate);
+    }
+
+    setVendor(vendor) {
+        this.vendor = vendor;
+    }
+
+    setAmount(amount) {
+        this.amount = amount;
     }
 
     /**

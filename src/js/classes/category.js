@@ -10,9 +10,98 @@ import Transaction from './transaction';
  */
 
 export default class Category {
-    constructor(name, amount, transactions) {
+    constructor(name, amount) {
         this.name = name;
-        this.amount = amount;
-        this.transactions = transactions;
+        this.budgeted = amount;
+        this.transactions = new Map();
+    }
+
+    /**
+     * 
+     * @param {*} date 
+     * @param {*} vendor 
+     * @param {*} amount 
+     */
+    add(date, vendor, amount) {
+
+    }
+
+    /**
+     * 
+     * @param {*} id 
+     */
+    remove(id) {
+
+    }
+
+    /**
+     * 
+     * @param {*} id 
+     * @param {*} options 
+     */
+    edit(id, options) {
+
+    }
+
+    /**
+     * 
+     */
+    getTransactions() {
+
+    }
+
+    /**
+     * 
+     * @param {*} vendor 
+     */
+    getByVendor(vendor) {
+
+    }
+
+    /**
+     * 
+     * @param {*} date 
+     */
+    getByDate(date) {
+
+    }
+
+    /**
+     * 
+     * @param {*} id 
+     */
+    getById(id) {
+
+    }
+
+    /**
+     * 
+     */
+    getTotalExpenditure() {
+
+    }
+
+    /**
+     * 
+     * @param {*} date 
+     */
+    getExpenditureByDate(date) {
+
+    }
+
+    /**
+     * 
+     * @param {*} vendor 
+     */
+    getExpenditureByVendor(vendor) {
+
+    }
+
+    /**
+     * 
+     * @param {Node} target 
+     */
+    render(target) {
+
     }
 }

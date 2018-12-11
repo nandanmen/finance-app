@@ -10,4 +10,8 @@ export default class Budget {
     constructor(categories) {
         this.categories = categories;
     }
+
+    render(target) {
+        
+    }
 }
