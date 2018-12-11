@@ -1,61 +1,13 @@
 'use strict'
 
-import Categories from './categories';
+import Category from './category';
 
 /**
  * This class represents a budget.
  */
 
 export default class Budget {
-    constructor(budgets) {
-        
-    }
-
-    /**
-     * 
-     * @param {*} category 
-     * @param {*} budget 
-     */
-    add(category, budget) {
-
-    }
-
-    /**
-     * 
-     * @param {*} category 
-     */
-    remove(category) {
-
-    }
-
-    /**
-     * 
-     * @param {*} category 
-     * @param {*} newBudget 
-     */
-    edit(category, newBudget) {
-
-    }
-
-    /**
-     * 
-     * @param {*} category 
-     */
-    getBudget(category) {
-
-    }
-
-    /**
-     * 
-     */
-    getTotal() {
-
-    }
-
-    /**
-     * 
-     */
-    getRemaining() {
-
+    constructor(categories) {
+        this.categories = categories;
     }
 }

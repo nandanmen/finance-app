@@ -1,6 +1,6 @@
 'use strict'
 
-import Categories from './categories';
+import Category from './category';
 import Transactions from './transactions';
 import Budget from './budget';
 
