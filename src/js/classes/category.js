@@ -49,6 +49,15 @@ export default class Category {
     }
 
     /**
+     * Returns the number of transactions in
+     * this category.
+     * @returns {Number} number of transactions
+     */
+    size() {
+        return this.transactions.size;
+    }
+
+    /**
      * Returns all the transactions in this category
      * as an array.
      */
@@ -118,7 +127,7 @@ export default class Category {
 
     /**
      * Returns the total expenditure for a given vendor.
-     * @param {*} vendor 
+     * @param {String} vendor 
      */
     getExpenditureByVendor(vendor) {
         const transactions = this.getByVendor(vendor);
