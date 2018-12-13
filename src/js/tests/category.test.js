@@ -5,6 +5,9 @@ import Transaction from '../classes/transaction';
 
 const ctg = new Category('Shopping', 250);
 
+const t1 = new Transaction(0, '9 dec', 'Starbucks', 4.50);
+const t2 = new Transaction(0, '9 dec', 'Starbucks', 5.20);
+
 describe('Category tests:', () => {
     test('Constructs new category with empty transactions', () => {
         expect(ctg.name).toBe('Shopping');
@@ -18,27 +21,24 @@ describe('Category tests:', () => {
         });
 
         test('Correctly adds one transaction', () => {
-            const toAdd = new Transaction(0, '9 dec', 'Starbucks', 4.50);
-            ctg.add(toAdd);
+            ctg.add(t1);
             expect(ctg.size()).toBe(1);
-            expect(ctg.contains(toAdd.id));
+            expect(ctg.contains(t1.id)).toBeTruthy();
         });
 
         test('Correctly adds an array of transactions', () => {
-            const toAdd = [
-                new Transaction(0, '9 dec', 'Starbucks', 4.50),
-                new Transaction(0, '9 dec', 'Starbucks', 5.20)
-            ]
+            const toAdd = [t1, t2]
             ctg.add(toAdd);
             expect(ctg.size()).toBe(2);
-            expect(ctg.contains(toAdd[0].id));
-            expect(ctg.contains(toAdd[1].id));
+            expect(ctg.contains(t1.id)).toBeTruthy();
+            expect(ctg.contains(t2.id)).toBeTruthy();
         });
     });
 
     describe('Category removals:', () => {
         beforeEach(() => {
-
+            ctg.clear();
+            ctg.add[t1, t2];
         });
 
         test('Correctly removes one transaction', () => {
