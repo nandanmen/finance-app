@@ -2,6 +2,8 @@
 
 import Transaction from './transaction';
 
+const ID_COUNT = 65536;
+
 /**
  * This class represents a category. A category 
  * has a name, budgeted amount and a list of 
@@ -18,16 +20,29 @@ export default class Category {
     /**
      * Adds a new transaction made with the given
      * parameters into this category.
-     * @param {String} date 
-     * @param {String} vendor 
-     * @param {Number} amount 
+     * @param {Transaction} transaction the transaction to be added.
+     *                      This function accepts a single transaction,
+     *                      or an array of transactions.
      */
-    add(date, vendor, amount) {
-        let id = Math.random() * 65536;
-        while (this.transactions.has(id)) id++;
+    add(transaction) {
+        if (transaction.constructor == Array) {
+            transaction.forEach(tr => {
+                this.addOne.call(this, tr);
+            });
+        } else {
+            this.addOne(transaction);
+        }
+    }
 
-        const toAdd = new Transaction(date, vendor, amount);
-        this.transactions.set(id, toAdd);
+    /**
+     * Adds a single transaction to this category.
+     * @param {Transaction} transaction 
+     */
+    addOne(transaction) {
+        let id = Math.ceil(Math.random() * ID_COUNT);
+        while (this.transactions.has(id)) id++;
+        transaction.id = id;
+        this.transactions.set(transaction.id, transaction);
     }
 
     /**
@@ -35,7 +50,8 @@ export default class Category {
      * @param {Number} id 
      */
     remove(id) {
-        this.transactions.delete(id);
+        if (this.contains(id))
+            this.transactions.delete(id);
     }
 
     /**
@@ -55,6 +71,13 @@ export default class Category {
      */
     size() {
         return this.transactions.size;
+    }
+
+    /**
+     * Deletes all transactions in this category.
+     */
+    clear() {
+        this.transactions.clear();
     }
 
     /**
