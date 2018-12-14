@@ -64,14 +64,14 @@ describe('Category tests:', () => {
     describe('Category getters:', () => {
         const t3 = new Transaction(50, '10 dec', 'Blenz', 4.50);
         const t4 = new Transaction(51, '10 dec', 'Blenz', 5.20);
-        
+
         beforeAll(() => {
             ctg.clear();
             ctg.add([t1,t2,t3,t4]);
         });
 
         test('Correctly returns all transactions', () => {
-            expect(ctg.getTransactions()).toEqual([t1,t2]);
+            expect(ctg.getTransactions()).toEqual([t1,t2,t3,t4]);
         });
 
         test('Correctly returns all transactions with given vendor', () => {
@@ -99,17 +99,17 @@ describe('Category tests:', () => {
         });
 
         test('Correctly returns total expenditure', () => {
-            const expected = [t1,t2,t3,t4].reduce((arr, tr) => arr + tr.amount);
+            const expected = t1.amount + t2.amount + t3.amount + t4.amount;
             expect(ctg.getTotalExpenditure()).toEqual(expected);
         });
 
         test('Correctly returns total expenditure for given date', () => {
-            const expected = [t1, t2].reduce((arr, tr) => arr + tr.amount);
+            const expected = t1.amount + t2.amount;
             expect(ctg.getExpenditureByDate(new Date('9 dec'))).toEqual(expected);
         });
 
         test('Correctly returns total expenditure with given vendor', () => {
-            const expected = [t3, t4].reduce((arr, tr) => arr + tr.amount);
+            const expected = t3.amount + t4.amount;
             expect(ctg.getExpenditureByVendor('Blenz')).toEqual(expected);
         });
     });

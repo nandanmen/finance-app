@@ -88,7 +88,7 @@ export default class Category {
      * @returns {Transaction[]} all transactions in this category.
      */
     getTransactions() {
-        return [...this.transactions.entries()];
+        return [...this.transactions.values()];
     }
 
     /**
@@ -110,7 +110,7 @@ export default class Category {
      */
     getByDate(date) {
         const transactions = this.getTransactions();
-        return transactions.filter(tr => tr.date === date);
+        return transactions.filter(tr => tr.date.getTime() === date.getTime());
     }
 
     /**
