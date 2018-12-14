@@ -1,6 +1,6 @@
 'use strict'
 
-import Transaction from './transaction';
+import Transaction from './Transaction';
 
 const ID_COUNT = 65536;
 
@@ -58,12 +58,15 @@ export default class Category {
 
     /**
      * Edits the transaction with given id based on the
-     * parameters set by the options object.
+     * options object passed.
      * @param {Number} id 
      * @param {Object} options 
      */
-    edit(id, options) {
-
+    edit(id, { date, vendor, amount } = {}) {
+        const tr = this.getById(id);
+        if (date) tr.date = date;
+        if (vendor) tr.vendor = vendor;
+        if (amount) tr.amount = amount;
     }
 
     /**

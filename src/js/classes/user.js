@@ -1,6 +1,6 @@
 'use strict'
 
-import Budget from './budget';
+import Budget from './Budget';
 
 /**
  * This class represents a user.

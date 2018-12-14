@@ -1,7 +1,7 @@
 'use strict'
 
-import Category from '../classes/category';
-import Transaction from '../classes/transaction';
+import Category from '../classes/Category';
+import Transaction from '../classes/Transaction';
 
 const ctg = new Category('Shopping', 250);
 
