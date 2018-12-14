@@ -1,6 +1,7 @@
 'use strict'
 
-import Category from './category';
+import Category from './Category';
+import Transaction from './Transaction';
 
 /**
  * This class represents a budget. A budget

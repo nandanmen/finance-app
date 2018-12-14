@@ -39,11 +39,8 @@ export default class Category {
      * @param {Transaction} transaction 
      */
     addOne(transaction) {
-        if (this.contains(transaction.id)) {
-            let id = Math.ceil(Math.random() * ID_COUNT);
-            while (this.transactions.has(id)) id++;
-            transaction.id = id;
-        }
+        while (this.contains(transaction.id))
+            transaction.id++;
         this.transactions.set(transaction.id, transaction);
     }
 
