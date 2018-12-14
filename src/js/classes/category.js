@@ -39,9 +39,11 @@ export default class Category {
      * @param {Transaction} transaction 
      */
     addOne(transaction) {
-        let id = Math.ceil(Math.random() * ID_COUNT);
-        while (this.transactions.has(id)) id++;
-        transaction.id = id;
+        if (this.contains(transaction.id)) {
+            let id = Math.ceil(Math.random() * ID_COUNT);
+            while (this.transactions.has(id)) id++;
+            transaction.id = id;
+        }
         this.transactions.set(transaction.id, transaction);
     }
 
@@ -83,6 +85,7 @@ export default class Category {
     /**
      * Returns all the transactions in this category
      * as an array.
+     * @returns {Transaction[]} all transactions in this category.
      */
     getTransactions() {
         return [...this.transactions.entries()];
@@ -92,6 +95,7 @@ export default class Category {
      * Returns all transactions in this category
      * with vendor equal to the passed vendor.
      * @param {String} vendor 
+     * @returns {Transaction[]}
      */
     getByVendor(vendor) {
         const transactions = this.getTransactions();
@@ -102,6 +106,7 @@ export default class Category {
      * Returns all transactions with date equal
      * to the parameter date.
      * @param {Date} date 
+     * @returns {Transaction[]}
      */
     getByDate(date) {
         const transactions = this.getTransactions();
@@ -111,6 +116,7 @@ export default class Category {
     /**
      * Return the transaction with the given id.
      * @param {Number} id 
+     * @returns {Transaction}
      */
     getById(id) {
         return this.transactions.get(id);
@@ -120,6 +126,7 @@ export default class Category {
      * Returns true if this category contains the
      * transaction with the given id.
      * @param {Number} id 
+     * @returns {Boolean}
      */
     contains(id) {
         return this.transactions.has(id);
@@ -129,6 +136,7 @@ export default class Category {
      * Returns the total expenditure for this category.
      * The expenditure is defined as the sum of amounts of
      * each transaction.
+     * @returns {Number}
      */
     getTotalExpenditure() {
         const transactions = this.getTransactions();
