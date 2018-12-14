@@ -8,6 +8,4 @@ The primary goal of the app is to provide a clean interface to manage budgets an
 
 ## Journals
 
-For learning and future reference I will attempt to document the creation and thinking process behind the making of this app. Find below a list of entries I have made so far:
-
-+ [13 December 2018](notes/131218.md)
+For learning and future reference I will attempt to document the creation and thinking process behind the making of this app. Please refer to the wiki page for the journal entries.
