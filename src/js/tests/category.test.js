@@ -62,11 +62,11 @@ describe('Category tests:', () => {
     });
 
     describe('Category getters:', () => {
+        const t3 = new Transaction(50, '10 dec', 'Blenz', 4.50);
+        const t4 = new Transaction(51, '10 dec', 'Blenz', 5.20);
+        
         beforeAll(() => {
             ctg.clear();
-
-            const t3 = new Transaction(50, '10 dec', 'Blenz', 4.50);
-            const t4 = new Transaction(51, '10 dec', 'Blenz', 5.20);
             ctg.add([t1,t2,t3,t4]);
         });
 
