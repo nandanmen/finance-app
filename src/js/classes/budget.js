@@ -4,8 +4,9 @@ import Category from './Category';
 import Transaction from './Transaction';
 
 /**
- * This class represents a budget. A budget
- * is a set of Category objects.
+ * This class represents a budget. A budget is a set of 
+ * Category objects. By default the Budget has 1 category,
+ * the 'Uncategorized' category.
  */
 
 export default class Budget {
@@ -23,7 +24,7 @@ export default class Budget {
      * @returns {Category} the category that was added
      */
     add(category, amount) {
-
+        return null;
     }
 
     /**
@@ -37,7 +38,7 @@ export default class Budget {
      * @returns {Transaction} the transaction that was added
      */
     addTransaction(date, vendor, amount, category) {
-
+        return null;
     }
 
     /**
@@ -46,7 +47,7 @@ export default class Budget {
      * @returns {Category} the category that was removed.
      */
     remove(category) {
-
+        return null;
     }
 
     /**
@@ -55,7 +56,7 @@ export default class Budget {
      * @returns {Transaction} the transaction that was removed.
      */
     removeTransaction(id) {
-
+        return null;
     }
 
     /**
@@ -64,9 +65,10 @@ export default class Budget {
      * if they wish to make a new category.
      * @param {Number} id 
      * @param {String} category 
+     * @returns {Transaction} the transaction that was moved.
      */
     move(id, category) {
-
+        return null;
     }
 
     /**
@@ -104,7 +106,7 @@ export default class Budget {
      * @returns {Category} the category if found, null otherwise.
      */
     getCategory(category) {
-
+        return null;
     }
 
     /**
@@ -112,7 +114,7 @@ export default class Budget {
      * @returns {Category[]}
      */
     getAllCategories() {
-
+        return [];
     }
 
     /**
@@ -131,7 +133,7 @@ export default class Budget {
      * @returns {Transaction[]}
      */
     getAllTransactions() {
-
+        return [];
     }
 
     /**
@@ -141,7 +143,7 @@ export default class Budget {
      * @returns {Transaction[]}
      */
     getByCategory(category) {
-
+        return [];
     }
 
     /**
@@ -151,7 +153,7 @@ export default class Budget {
      * @returns {Transaction[]}
      */
     getByDate(date) {
-
+        return [];
     }
 
     /**
@@ -161,7 +163,7 @@ export default class Budget {
      * @returns {Transaction[]}
      */
     getByVendor(vendor) {
-
+        return [];
     }
 
     /**
@@ -169,7 +171,7 @@ export default class Budget {
      * @returns {Number}
      */
     getTotalExpenditure() {
-
+        return 0;
     }
 
     /**
@@ -177,7 +179,7 @@ export default class Budget {
      * @returns {Number}
      */
     getRemainder() {
-
+        return 0;
     }
 
     /**

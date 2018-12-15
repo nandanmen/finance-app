@@ -8,7 +8,7 @@ import Transaction from '../classes/Transaction';
 
 const BUDGET = new Budget();
 
-const CTG0 = new Category('Uncategorized', 0);
+const DEFAULT = new Category('Uncategorized', 0);
 const CTG1 = new Category('Shopping', 150);
 const CTG2 = new Category('Food', 600);
 
@@ -20,8 +20,10 @@ const TR3 = new Transaction(2, '14 dec', 'Nordstrom', 50);
 
 describe('Budget tests', () => {
     test('Constructs new budget with only uncategorized category', () => {
-        expect(BUDGET.size()).toBe(1);
-        expect(BUDGET.contains(CTG0)).toBeTruthy();
+        expect(BUDGET.size()).toBe(0);
+        expect(BUDGET.default).toEqual(DEFAULT);
+        expect(BUDGET.expenses).toBe(0);
+        expect(BUDGET.total).toBe(0);
     });
 
     describe('Additions', () => {
@@ -31,8 +33,8 @@ describe('Budget tests', () => {
 
         test('Correctly adds new, empty category', () => {
             BUDGET.add('Shopping', 150);
-            expect(BUDGET.size()).toBe(2);
-            expect(BUDGET.contains(CTG1)).toBeTruthy();
+            expect(BUDGET.size()).toBe(1);
+            expect(BUDGET.contains(CTG1.name)).toBeTruthy();
         });
 
         test('Correctly adds new transaction in appropriate category', () => {
