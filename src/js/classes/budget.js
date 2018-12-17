@@ -320,9 +320,7 @@ export default class Budget {
         const ctgsNode = target.querySelector('.category__legend');
         const ctgs = this.getAllCategories();
         ctgs.forEach(ctg => {
-            const li = document.createElement('li');
-            li.textContent = ctg.name;
-            ctgsNode.appendChild(li);
+            ctg.render(ctgsNode);
         });
 
         const trsNode = target.querySelector('.transactions');

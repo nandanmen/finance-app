@@ -495,7 +495,11 @@ function () {
 
   }, {
     key: "render",
-    value: function render(target) {}
+    value: function render(target) {
+      var li = document.createElement('li');
+      li.textContent = this.name;
+      target.appendChild(li);
+    }
   }]);
 
   return Category;
@@ -1012,9 +1016,7 @@ function () {
       var ctgsNode = target.querySelector('.category__legend');
       var ctgs = this.getAllCategories();
       ctgs.forEach(function (ctg) {
-        var li = document.createElement('li');
-        li.textContent = ctg.name;
-        ctgsNode.appendChild(li);
+        ctg.render(ctgsNode);
       });
       var trsNode = target.querySelector('.transactions');
       var transactions = this.getAllTransactions();

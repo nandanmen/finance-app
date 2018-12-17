@@ -172,6 +172,8 @@ export default class Category {
      * @param {Node} target 
      */
     render(target) {
-
+        const li = document.createElement('li');
+        li.textContent = this.name;
+        target.appendChild(li);
     }
 }
