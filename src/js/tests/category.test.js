@@ -26,9 +26,9 @@ describe('Category tests:', () => {
             expect(ctg.contains(t1.id)).toBeTruthy();
         });
 
-        test('Correctly adds an array of transactions', () => {
+        test('Correctly adds multiple transactions', () => {
             const toAdd = [t1, t2];
-            ctg.add(toAdd);
+            ctg.add(...toAdd);
             expect(ctg.size()).toBe(2);
             expect(ctg.contains(t1.id)).toBeTruthy();
             expect(ctg.contains(t2.id)).toBeTruthy();
@@ -38,7 +38,7 @@ describe('Category tests:', () => {
     describe('Category removals:', () => {
         beforeEach(() => {
             ctg.clear();
-            ctg.add([t1, t2]);
+            ctg.add(...[t1, t2]);
         });
 
         test('Correctly removes one transaction', () => {
@@ -67,7 +67,7 @@ describe('Category tests:', () => {
 
         beforeAll(() => {
             ctg.clear();
-            ctg.add([t1,t2,t3,t4]);
+            ctg.add(...[t1,t2,t3,t4]);
         });
 
         test('Correctly returns all transactions', () => {
