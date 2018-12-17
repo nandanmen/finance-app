@@ -11,8 +11,7 @@ import Transaction from './Transaction';
 
 export default class Budget {
     constructor() {
-        this.default = new Category('Uncategorized', 0);
-        this.categories = [];
+        this.categories = [new Category('Uncategorized', 0)];
         this.expenses = 0;
         this.total = 0;
     }
@@ -24,21 +23,28 @@ export default class Budget {
      * @returns {Category} the category that was added
      */
     add(category, amount) {
-        return null;
+        if (!this.contains(category)) {
+            const toAdd = new Category(category, amount);
+            this.categories.push(toAdd);
+            return toAdd;
+        }
     }
 
     /**
      * Adds a new transaction to the given category, if it exists.
      * TODO: If it does not exist, prompt user if they wish to make a new
      *       category.
-     * @param {String} date a string corresponding to the date of the transaction
-     * @param {String} vendor name of the vendor
-     * @param {Number} amount amount of the transaction
+     * @param {Transaction} transaction the transaction to be added
      * @param {String} category the category of the transaction
-     * @returns {Transaction} the transaction that was added
+     * @param {Number} amount optional, budgeted amount of new category
+     * @returns {Transaction} the transaction that was added if successful
      */
-    addTransaction(date, vendor, amount, category) {
-        return null;
+    addTransaction(transaction, category = 'Uncategorized', amount = null) {
+        if (!this.contains(category)) {
+            this.add(category, amount);
+        }
+        const ctg = this.getCategory(category);
+        ctg.add(transaction);
     }
 
     /**
@@ -47,7 +53,7 @@ export default class Budget {
      * @returns {Category} the category that was removed.
      */
     remove(category) {
-        return null;
+        
     }
 
     /**
@@ -60,6 +66,16 @@ export default class Budget {
     }
 
     /**
+     * Deletes all categories except for the default
+     * 'Uncategorized' category.
+     */
+    clear() {
+        for (let i = 1; i < this.size(); i++) {
+            this.categories.pop();
+        }
+    }
+
+    /**
      * Moves the transaction with given id to the category with
      * given name. TODO: If category does not exist, prompt user
      * if they wish to make a new category.
@@ -69,6 +85,26 @@ export default class Budget {
      */
     move(id, category) {
         return null;
+    }
+
+    /**
+     * 
+     * @param {String} category 
+     * @param {Category} options 
+     * @returns {Category} the revised category object
+     */
+    edit(category, { name, amount } = {}) {
+
+    }
+
+    /**
+     * 
+     * @param {Number} id 
+     * @param {Object} options 
+     * @returns {Transactions} the revised transactions object
+     */
+    editTransaction(id, { date, vendor, amount } = {}) {
+
     }
 
     /**
@@ -91,13 +127,19 @@ export default class Budget {
     }
 
     /**
-     * Deletes all categories except for the default
-     * 'Uncategorized' category.
+     * 
+     * @param {Number} id 
+     * @returns {Boolean}
      */
-    clear() {
-        for (let i = 0; i < this.size(); i++) {
-            this.categories.pop();
-        }
+    containsTransaction(id) {
+
+    }
+
+    /**
+     * @returns {Category}
+     */
+    getDefault() {
+        return this.categories[0];
     }
 
     /**
@@ -107,6 +149,15 @@ export default class Budget {
      */
     getCategory(category) {
         return null;
+    }
+
+    /**
+     * 
+     * @param {Number} id 
+     * @returns {Category} category object containing this transaction.
+     */
+    getCategoryOf(id) {
+
     }
 
     /**
@@ -129,11 +180,27 @@ export default class Budget {
     }
 
     /**
+     * 
+     * @param {Number} id 
+     * @returns {Transaction}
+     */
+    getTransaction(id) {
+
+    }
+
+    /**
      * Returns all the transactions in every category.
      * @returns {Transaction[]}
      */
     getAllTransactions() {
         return [];
+    }
+
+    /**
+     * @returns {Number}
+     */
+    getNumTransactions() {
+
     }
 
     /**
