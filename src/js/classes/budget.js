@@ -26,6 +26,7 @@ export default class Budget {
         if (!this.contains(category)) {
             const toAdd = new Category(category, amount);
             this.categories.push(toAdd);
+            this.total += amount;
             return toAdd;
         }
     }

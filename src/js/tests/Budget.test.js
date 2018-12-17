@@ -215,80 +215,90 @@ describe('Budget tests', () => {
     });
 
     describe('Getters', () => {
-        test('Retrieves the default uncategorized category object', () => {
+        beforeAll(() => {
+            BUDGET.add('Shopping', 150);
+            BUDGET.add('Food', 600);
+            BUDGET.addTransaction(TR1, 'Food');
+            BUDGET.addTransaction(TR2, 'Food');
+            BUDGET.addTransaction(TR3, 'Shopping');
+        })
 
+        test('Retrieves the default uncategorized category object', () => {
+            expect(BUDGET.getDefault()).toEqual(DEFAULT);
         });
 
         test('Retrieves the appropriate category object', () => {
-
+            expect(BUDGET.getCategory('Shopping')).toEqual(CTG1);
+            expect(BUDGET.getCategory('Food')).toEqual(CTG2);
         });
 
         test('Retrieves the category pertaining to given transaction', () => {
-
+            expect(BUDGET.getCategoryOf(TR1.id)).toEqual(CTG2);
+            expect(BUDGET.getCategoryOf(3)).toBeNull();
         });
 
         test('Retrieves all categories in budget', () => {
-
+            expect(BUDGET.getAllCategories()).toEqual([CTG1, CTG2]);
         });
 
         test('Retrieves size of category', () => {
-
+            expect(BUDGET.getSizeOf('Food')).toEqual(2);
         });
 
         test('Returns size = 0 if category does not exist', () => {
-
+            expect(BUDGET.getSizeOf('Car')).toEqual(0);
         });
 
         test('Retrieves transaction with given id', () => {
-
+            expect(BUDGET.getTransaction(TR1.id)).toEqual(TR1);
         });
 
         test('Returns null if id does not correspond to a transaction', () => {
-
+            expect(BUDGET.getTransaction(3)).toBeNull();
         });
 
         test('Returns all transactions in this budget', () => {
-
+            expect(BUDGET.getAllTransactions()).toEqual([TR3,TR1,TR2]);
         });
 
         test('Retrieves the total number of transactions in this budget', () => {
-
+            expect(BUDGET.getNumTransactions()).toBe(3);
         });
 
         test('Retrieves all transactions in given category', () => {
-
+            expect(BUDGET.getByCategory('Food')).toEqual([TR1,TR2]);
         });
 
         test('Returns empty array if category does not exist', () => {
-
+            expect(BUDGET.getByCategory('Car')).toEqual([]);
         });
 
         test('Returns all transactions with date equal to given date', () => {
-
+            expect(BUDGET.getByDate('14 dec')).toEqual([TR2,TR3]);
         });
 
         test('Returns empty array if no transaction matches given date', () => {
-
+            expect(BUDGET.getByDate('11 dec')).toEqual([]);
         });
 
         test('Returns empty array if given date string not parsable', () => {
-
+            expect(BUDGET.getByDate('blabal')).toEqual([]);
         });
 
         test('Returns all transactions with vendor equal to given vendor', () => {
-
+            expect(BUDGET.getByVendor('Danbo')).toEqual([TR1]);
         });
 
         test('Returns empty array if no transaction matches given vendor', () => {
-
+            expect(BUDGET.getByVendor('Starbucks')).toEqual([]);
         });
 
         test('Returns total expenditure for all categories in this budget', () => {
-
+            expect(BUDGET.getTotalExpenditure()).toEqual(TR1.amount + TR2.amount + TR3.amount);
         });
 
         test('Returns remaining amount available for all categories', () => {
-
+            expect(BUDGET.getRemainder()).toEqual(682.3);
         });
     });
 });
