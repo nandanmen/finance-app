@@ -12,8 +12,6 @@ import Transaction from './Transaction';
 export default class Budget {
     constructor() {
         this.categories = [new Category('Uncategorized', 0)];
-        this.expenses = 0;
-        this.total = 0;
     }
 
     /**
@@ -26,9 +24,9 @@ export default class Budget {
         if (!this.contains(category)) {
             const toAdd = new Category(category, amount);
             this.categories.push(toAdd);
-            this.total += amount;
             return toAdd;
         }
+        return null;
     }
 
     /**
@@ -41,11 +39,12 @@ export default class Budget {
      * @returns {Transaction} the transaction that was added if successful
      */
     addTransaction(transaction, category = 'Uncategorized', amount = null) {
-        if (!this.contains(category)) {
-            this.add(category, amount);
+        let ctg = this.getCategory(category);
+        if (!ctg) {
+            ctg = this.add(category, amount);
         }
-        const ctg = this.getCategory(category);
         ctg.add(transaction);
+        return transaction;
     }
 
     /**
@@ -54,7 +53,10 @@ export default class Budget {
      * @returns {Category} the category that was removed.
      */
     remove(category) {
-        
+        const ctg = this.getCategory(category);
+        const idx = this.categories.indexOf(ctg);
+        if (idx > -1) this.categories.splice(idx, 1);
+        return ctg;
     }
 
     /**
@@ -63,7 +65,13 @@ export default class Budget {
      * @returns {Transaction} the transaction that was removed.
      */
     removeTransaction(id) {
-        return null;
+        const ctg = this.getCategoryOf(id);
+        let toRemove = null;
+        if (ctg) {
+            toRemove = ctg.getById(id);
+            ctg.remove(id);
+        }
+        return toRemove;
     }
 
     /**
@@ -71,9 +79,8 @@ export default class Budget {
      * 'Uncategorized' category.
      */
     clear() {
-        for (let i = 1; i < this.size(); i++) {
-            this.categories.pop();
-        }
+        this.categories.forEach(ctg => ctg.clear());
+        this.categories = [new Category('Uncategorized', 0)];
     }
 
     /**
@@ -84,8 +91,17 @@ export default class Budget {
      * @param {String} category 
      * @returns {Transaction} the transaction that was moved.
      */
-    move(id, category) {
-        return null;
+    move(id, category, amount = null) {
+        const old = this.getCategoryOf(id);
+        let target = this.getCategory(category);
+        if (!target) target = this.add(category, amount);
+
+        const toMove = this.getTransaction(id);
+        if (toMove) {
+            old.remove(id);
+            target.add(toMove);
+        }
+        return toMove;
     }
 
     /**
@@ -95,7 +111,12 @@ export default class Budget {
      * @returns {Category} the revised category object
      */
     edit(category, { name, amount } = {}) {
-
+        let edit = this.getCategory(category);
+        if (edit) {
+            if (name) edit.name = name;
+            if (amount) edit.budgeted = amount;
+        }
+        return edit;
     }
 
     /**
@@ -105,7 +126,19 @@ export default class Budget {
      * @returns {Transactions} the revised transactions object
      */
     editTransaction(id, { date, vendor, amount } = {}) {
+        const old = this.getTransaction(id);
+        const ctg = this.getCategoryOf(id);
+        if (old) {
+            let edit = new Transaction(old.id, old.date, old.vendor, old.amount);
+            if (date) edit.date = new Date(date);
+            if (vendor) edit.vendor = vendor;
+            if (amount) edit.amount = amount;
 
+            this.removeTransaction(old.id);
+            this.addTransaction(edit, ctg.name);
+            return edit;
+        }
+        return null;
     }
 
     /**
@@ -133,7 +166,9 @@ export default class Budget {
      * @returns {Boolean}
      */
     containsTransaction(id) {
-
+        return this.categories
+                .filter(ctg => ctg.contains(id))
+                .length > 0;
     }
 
     /**
@@ -149,7 +184,8 @@ export default class Budget {
      * @returns {Category} the category if found, null otherwise.
      */
     getCategory(category) {
-        return null;
+        const filtered = this.categories.filter(ctg => ctg.name === category);
+        return filtered.length > 0 ? filtered[0] : null;
     }
 
     /**
@@ -158,7 +194,10 @@ export default class Budget {
      * @returns {Category} category object containing this transaction.
      */
     getCategoryOf(id) {
-
+        for (const ctg of this.categories) {
+            if (ctg.contains(id)) return ctg;
+        }
+        return null;
     }
 
     /**
@@ -166,7 +205,7 @@ export default class Budget {
      * @returns {Category[]}
      */
     getAllCategories() {
-        return [];
+        return this.categories.slice(1);
     }
 
     /**
@@ -186,7 +225,9 @@ export default class Budget {
      * @returns {Transaction}
      */
     getTransaction(id) {
-
+        const container = this.getCategoryOf(id);
+        if (container) return container.getById(id);
+        return null;
     }
 
     /**
@@ -194,14 +235,18 @@ export default class Budget {
      * @returns {Transaction[]}
      */
     getAllTransactions() {
-        return [];
+        let result = [];
+        for (const ctg of this.categories) {
+            result.push(...ctg.getTransactions());
+        }
+        return result;
     }
 
     /**
      * @returns {Number}
      */
     getNumTransactions() {
-
+        return this.getAllTransactions().length;
     }
 
     /**
@@ -211,7 +256,8 @@ export default class Budget {
      * @returns {Transaction[]}
      */
     getByCategory(category) {
-        return [];
+        const container = this.getCategory(category);
+        return container ? container.getTransactions() : [];
     }
 
     /**
@@ -221,7 +267,12 @@ export default class Budget {
      * @returns {Transaction[]}
      */
     getByDate(date) {
-        return [];
+        const dt = new Date(date);
+        let result = [];
+        for (const ctg of this.categories) {
+            result.push(...ctg.getByDate(dt));
+        }
+        return result;
     }
 
     /**
@@ -231,7 +282,11 @@ export default class Budget {
      * @returns {Transaction[]}
      */
     getByVendor(vendor) {
-        return [];
+        let result = [];
+        for (const ctg of this.categories) {
+            result.push(...ctg.getByVendor(vendor));
+        }
+        return result;;
     }
 
     /**
@@ -239,7 +294,9 @@ export default class Budget {
      * @returns {Number}
      */
     getTotalExpenditure() {
-        return 0;
+        return this.categories.reduce((acc, ctg) => {
+            return acc + ctg.getTotalExpenditure();
+        }, 0);
     }
 
     /**
@@ -247,7 +304,9 @@ export default class Budget {
      * @returns {Number}
      */
     getRemainder() {
-        return 0;
+        return this.categories.reduce((acc, ctg) => {
+            return acc + ctg.budgeted;
+        }, 0) - this.getTotalExpenditure();
     }
 
     /**

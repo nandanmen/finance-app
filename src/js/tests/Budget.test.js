@@ -22,8 +22,6 @@ describe('Budget tests', () => {
     test('Constructs new budget with only uncategorized category', () => {
         expect(BUDGET.size()).toBe(1);
         expect(BUDGET.getDefault()).toEqual(DEFAULT);
-        expect(BUDGET.expenses).toBe(0);
-        expect(BUDGET.total).toBe(0);
     });
 
     describe('Additions', () => {
@@ -35,7 +33,7 @@ describe('Budget tests', () => {
             const added = BUDGET.add('Shopping', 150);
             expect(BUDGET.size()).toBe(2);
             expect(BUDGET.contains(CTG1.name)).toBeTruthy();
-            expect(added).toEqual(CTG1);
+            expect(added.name).toEqual(CTG1.name);
         });
 
         test('Adds new transaction in Uncategorized if category is not specified', () => {
@@ -65,7 +63,7 @@ describe('Budget tests', () => {
             
             const ctg = BUDGET.getCategory('Food');
             expect(ctg).toBeTruthy();
-            expect(ctg).toEqual(CTG2);
+            expect(ctg.name).toEqual(CTG2.name);
             expect(ctg.size()).toBe(1);
             expect(ctg.contains(TR1.id)).toBeTruthy();
         });
@@ -135,7 +133,7 @@ describe('Budget tests', () => {
             test('Moves transaction to a new category', () => {
                 const original = BUDGET.getCategoryOf(TR2.id);
 
-                BUDGET.move(TR2.id, 'Car');
+                BUDGET.move(TR2.id, 'Car', 300);
                 expect(original.contains(TR2.id)).toBeFalsy();
 
                 const after = BUDGET.getCategory('Car');
@@ -197,7 +195,7 @@ describe('Budget tests', () => {
                 );
 
                 const actual = BUDGET.getTransaction(TR1.id);
-                expect(actual).toEqual(edited);
+                expect(edited).toEqual(actual);
             });
 
             test('Updates individual transaction fields', () => {
@@ -216,11 +214,10 @@ describe('Budget tests', () => {
 
     describe('Getters', () => {
         beforeAll(() => {
-            BUDGET.add('Shopping', 150);
-            BUDGET.add('Food', 600);
-            BUDGET.addTransaction(TR1, 'Food');
+            BUDGET.clear();
+            BUDGET.addTransaction(TR1, 'Food', 600);
             BUDGET.addTransaction(TR2, 'Food');
-            BUDGET.addTransaction(TR3, 'Shopping');
+            BUDGET.addTransaction(TR3, 'Shopping', 150);
         })
 
         test('Retrieves the default uncategorized category object', () => {
@@ -228,17 +225,19 @@ describe('Budget tests', () => {
         });
 
         test('Retrieves the appropriate category object', () => {
-            expect(BUDGET.getCategory('Shopping')).toEqual(CTG1);
-            expect(BUDGET.getCategory('Food')).toEqual(CTG2);
+            expect(BUDGET.getCategory('Shopping').name).toEqual(CTG1.name);
+            expect(BUDGET.getCategory('Food').name).toEqual(CTG2.name);
         });
 
         test('Retrieves the category pertaining to given transaction', () => {
-            expect(BUDGET.getCategoryOf(TR1.id)).toEqual(CTG2);
+            expect(BUDGET.getCategoryOf(TR1.id).name).toEqual(CTG2.name);
             expect(BUDGET.getCategoryOf(3)).toBeNull();
         });
 
         test('Retrieves all categories in budget', () => {
-            expect(BUDGET.getAllCategories()).toEqual([CTG1, CTG2]);
+            expect(BUDGET.getAllCategories().map(ctg => {
+                return ctg.name;
+            })).toEqual([CTG2.name, CTG1.name]);
         });
 
         test('Retrieves size of category', () => {
@@ -258,7 +257,7 @@ describe('Budget tests', () => {
         });
 
         test('Returns all transactions in this budget', () => {
-            expect(BUDGET.getAllTransactions()).toEqual([TR3,TR1,TR2]);
+            expect(BUDGET.getAllTransactions()).toEqual([TR1,TR2,TR3]);
         });
 
         test('Retrieves the total number of transactions in this budget', () => {
