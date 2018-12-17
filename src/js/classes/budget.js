@@ -311,9 +311,25 @@ export default class Budget {
 
     /**
      * 
-     * @param {*} target 
+     * @param {Element} target 
      */
     render(target) {
+        const remainder = target.querySelector('.remainder--amount');
+        remainder.textContent = `\$${this.getRemainder()}`;
 
+        const ctgsNode = target.querySelector('.category__legend');
+        const ctgs = this.getAllCategories();
+        ctgs.forEach(ctg => {
+            const li = document.createElement('li');
+            li.textContent = ctg.name;
+            ctgsNode.appendChild(li);
+        });
+
+        const trsNode = target.querySelector('.transactions');
+        const transactions = this.getAllTransactions();
+        console.log(transactions);
+        transactions.forEach(tr => {
+            tr.render(trsNode);
+        });
     }
 }

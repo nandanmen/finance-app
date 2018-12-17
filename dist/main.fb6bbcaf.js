@@ -176,41 +176,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../node_modules/parcel/src/builtins/css-loader.js"}],"js/categories.js":[function(require,module,exports) {
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Categories = function Categories() {
-  _classCallCheck(this, Categories);
-};
-
-exports.default = Categories;
-},{}],"js/budget.js":[function(require,module,exports) {
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _categories = _interopRequireDefault(require("./categories"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Budget = function Budget() {
-  _classCallCheck(this, Budget);
-};
-
-exports.default = Budget;
-},{"./categories":"js/categories.js"}],"js/transaction.js":[function(require,module,exports) {
+},{"_css_loader":"../node_modules/parcel/src/builtins/css-loader.js"}],"js/classes/Transaction.js":[function(require,module,exports) {
 'use strict';
 /**
  * This class represents a transaction. A transaction
@@ -218,7 +184,6 @@ exports.default = Budget;
  *      - the date of transaction
  *      - the name of the vendor
  *      - the amount in the transaction
- *      - the category the transaction belongs to
  */
 
 Object.defineProperty(exports, "__esModule", {
@@ -235,19 +200,53 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var Transaction =
 /*#__PURE__*/
 function () {
-  function Transaction(date, vendor, amount, category) {
+  function Transaction(id, date, vendor, amount) {
     _classCallCheck(this, Transaction);
 
+    this.id = id;
     this.date = new Date(date);
     this.vendor = vendor;
     this.amount = amount;
-    this.category = category;
   }
+  /**
+   * Returns the date of this transaction in
+   * the following format: DD/MM
+   */
+
 
   _createClass(Transaction, [{
     key: "getDate",
     value: function getDate() {
       return "".concat(this.date.getDate(), "/").concat(this.date.getMonth() + 1);
+    }
+  }, {
+    key: "getAmount",
+    value: function getAmount() {
+      return this.amount.toFixed(2);
+    }
+  }, {
+    key: "setDate",
+    value: function setDate(newDate) {
+      this.date = new Date(newDate);
+    }
+    /**
+     * Renders this transaction onto the DOM
+     * node specified by target.
+     * @param {Element} target 
+     */
+
+  }, {
+    key: "render",
+    value: function render(target) {
+      var template = document.importNode(document.getElementById('template--transaction').content, true);
+      console.log(template);
+      var date = template.querySelector('.transaction__date');
+      date.textContent = this.getDate();
+      var vendor = template.querySelector('.transaction__vendor');
+      vendor.textContent = this.vendor;
+      var amount = template.querySelector('.transaction__amount');
+      amount.textContent = this.getAmount();
+      target.appendChild(template, true);
     }
   }]);
 
@@ -255,7 +254,7 @@ function () {
 }();
 
 exports.default = Transaction;
-},{}],"js/transactions.js":[function(require,module,exports) {
+},{}],"js/classes/Category.js":[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -263,11 +262,267 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _categories = _interopRequireDefault(require("./categories"));
-
-var _transaction = _interopRequireDefault(require("./transaction"));
+var _Transaction = _interopRequireDefault(require("./Transaction"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var ID_COUNT = 65536;
+/**
+ * This class represents a category. A category 
+ * has a name, budgeted amount and a list of 
+ * transactions pertaining to this category.
+ */
+
+var Category =
+/*#__PURE__*/
+function () {
+  function Category(name, amount) {
+    _classCallCheck(this, Category);
+
+    this.name = name;
+    this.budgeted = amount;
+    this.transactions = new Map();
+  }
+  /**
+   * Adds a new transaction made with the given
+   * parameters into this category.
+   * @param {Transaction} transaction the transaction to be added.
+   *                      This function accepts a single transaction,
+   *                      or an array of transactions.
+   */
+
+
+  _createClass(Category, [{
+    key: "add",
+    value: function add(transaction) {
+      var _this = this;
+
+      if (transaction.constructor == Array) {
+        transaction.forEach(function (tr) {
+          _this.addOne.call(_this, tr);
+        });
+      } else {
+        this.addOne(transaction);
+      }
+    }
+    /**
+     * Adds a single transaction to this category.
+     * @param {Transaction} transaction 
+     */
+
+  }, {
+    key: "addOne",
+    value: function addOne(transaction) {
+      while (this.contains(transaction.id)) {
+        transaction.id++;
+      }
+
+      this.transactions.set(transaction.id, transaction);
+    }
+    /**
+     * Removes the transaction with id from this category.
+     * @param {Number} id 
+     */
+
+  }, {
+    key: "remove",
+    value: function remove(id) {
+      if (this.contains(id)) this.transactions.delete(id);
+    }
+    /**
+     * Edits the transaction with given id based on the
+     * options object passed.
+     * @param {Number} id 
+     * @param {Object} options 
+     */
+
+  }, {
+    key: "edit",
+    value: function edit(id) {
+      var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+          date = _ref.date,
+          vendor = _ref.vendor,
+          amount = _ref.amount;
+
+      var tr = this.getById(id);
+      if (date) tr.date = date;
+      if (vendor) tr.vendor = vendor;
+      if (amount) tr.amount = amount;
+    }
+    /**
+     * Returns the number of transactions in
+     * this category.
+     * @returns {Number} number of transactions
+     */
+
+  }, {
+    key: "size",
+    value: function size() {
+      return this.transactions.size;
+    }
+    /**
+     * Deletes all transactions in this category.
+     */
+
+  }, {
+    key: "clear",
+    value: function clear() {
+      this.transactions.clear();
+    }
+    /**
+     * Returns all the transactions in this category
+     * as an array.
+     * @returns {Transaction[]} all transactions in this category.
+     */
+
+  }, {
+    key: "getTransactions",
+    value: function getTransactions() {
+      return _toConsumableArray(this.transactions.values());
+    }
+    /**
+     * Returns all transactions in this category
+     * with vendor equal to the passed vendor.
+     * @param {String} vendor 
+     * @returns {Transaction[]}
+     */
+
+  }, {
+    key: "getByVendor",
+    value: function getByVendor(vendor) {
+      var transactions = this.getTransactions();
+      return transactions.filter(function (tr) {
+        return tr.vendor === vendor;
+      });
+    }
+    /**
+     * Returns all transactions with date equal
+     * to the parameter date.
+     * @param {Date} date 
+     * @returns {Transaction[]}
+     */
+
+  }, {
+    key: "getByDate",
+    value: function getByDate(date) {
+      var transactions = this.getTransactions();
+      return transactions.filter(function (tr) {
+        return tr.date.getTime() === date.getTime();
+      });
+    }
+    /**
+     * Return the transaction with the given id.
+     * @param {Number} id 
+     * @returns {Transaction}
+     */
+
+  }, {
+    key: "getById",
+    value: function getById(id) {
+      return this.transactions.get(id);
+    }
+    /**
+     * Returns true if this category contains the
+     * transaction with the given id.
+     * @param {Number} id 
+     * @returns {Boolean}
+     */
+
+  }, {
+    key: "contains",
+    value: function contains(id) {
+      return this.transactions.has(id);
+    }
+    /**
+     * Returns the total expenditure for this category.
+     * The expenditure is defined as the sum of amounts of
+     * each transaction.
+     * @returns {Number}
+     */
+
+  }, {
+    key: "getTotalExpenditure",
+    value: function getTotalExpenditure() {
+      var transactions = this.getTransactions();
+      return transactions.reduce(function (acc, tr) {
+        return acc + tr.amount;
+      }, 0);
+    }
+    /**
+     * Returns the total expenditure for a given date.
+     * @param {Date} date 
+     */
+
+  }, {
+    key: "getExpenditureByDate",
+    value: function getExpenditureByDate(date) {
+      var transactions = this.getByDate(date);
+      return transactions.reduce(function (acc, tr) {
+        return acc + tr.amount;
+      }, 0);
+    }
+    /**
+     * Returns the total expenditure for a given vendor.
+     * @param {String} vendor 
+     */
+
+  }, {
+    key: "getExpenditureByVendor",
+    value: function getExpenditureByVendor(vendor) {
+      var transactions = this.getByVendor(vendor);
+      return transactions.reduce(function (acc, tr) {
+        return acc + tr.amount;
+      }, 0);
+    }
+    /**
+     * 
+     * @param {Node} target 
+     */
+
+  }, {
+    key: "render",
+    value: function render(target) {}
+  }]);
+
+  return Category;
+}();
+
+exports.default = Category;
+},{"./Transaction":"js/classes/Transaction.js"}],"js/classes/Budget.js":[function(require,module,exports) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _Category = _interopRequireDefault(require("./Category"));
+
+var _Transaction = _interopRequireDefault(require("./Transaction"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -276,136 +531,528 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 /**
- * This class represents a list of Transaction
- * objects. Allows for searching of transactions,
- * addition and removal of transactions.
+ * This class represents a budget. A budget is a set of 
+ * Category objects. By default the Budget has 1 category,
+ * the 'Uncategorized' category.
  */
-var Transactions =
+var Budget =
 /*#__PURE__*/
 function () {
-  function Transactions(transactions) {
-    _classCallCheck(this, Transactions);
+  function Budget() {
+    _classCallCheck(this, Budget);
 
-    this.transactions = transactions;
+    this.categories = [new _Category.default('Uncategorized', 0)];
   }
   /**
-   * 
-   * @param {String} date 
-   * @param {String} vendor 
-   * @param {Number} amount 
-   * @param {String} category 
+   * Adds a new empty category to this budget.
+   * @param {String} category the name of the category
+   * @param {Number} amount the budgeted amount for this category
+   * @returns {Category} the category that was added
    */
 
 
-  _createClass(Transactions, [{
+  _createClass(Budget, [{
     key: "add",
-    value: function add(date, vendor, amount, category) {}
+    value: function add(category, amount) {
+      if (!this.contains(category)) {
+        var toAdd = new _Category.default(category, amount);
+        this.categories.push(toAdd);
+        return toAdd;
+      }
+
+      return null;
+    }
     /**
-     * 
-     * @param {Transaction} transaction 
+     * Adds a new transaction to the given category, if it exists.
+     * TODO: If it does not exist, prompt user if they wish to make a new
+     *       category.
+     * @param {Transaction} transaction the transaction to be added
+     * @param {String} category the category of the transaction
+     * @param {Number} amount optional, budgeted amount of new category
+     * @returns {Transaction} the transaction that was added if successful
+     */
+
+  }, {
+    key: "addTransaction",
+    value: function addTransaction(transaction) {
+      var category = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Uncategorized';
+      var amount = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+      var ctg = this.getCategory(category);
+
+      if (!ctg) {
+        ctg = this.add(category, amount);
+      }
+
+      ctg.add(transaction);
+      return transaction;
+    }
+    /**
+     * Removes the category with the given name.
+     * @param {String} category 
+     * @returns {Category} the category that was removed.
      */
 
   }, {
     key: "remove",
-    value: function remove(transaction) {}
+    value: function remove(category) {
+      var ctg = this.getCategory(category);
+      var idx = this.categories.indexOf(ctg);
+      if (idx > -1) this.categories.splice(idx, 1);
+      return ctg;
+    }
+    /**
+     * Removes the transaction with given id from this budget.
+     * @param {Number} id 
+     * @returns {Transaction} the transaction that was removed.
+     */
+
+  }, {
+    key: "removeTransaction",
+    value: function removeTransaction(id) {
+      var ctg = this.getCategoryOf(id);
+      var toRemove = null;
+
+      if (ctg) {
+        toRemove = ctg.getById(id);
+        ctg.remove(id);
+      }
+
+      return toRemove;
+    }
+    /**
+     * Deletes all categories except for the default
+     * 'Uncategorized' category.
+     */
+
+  }, {
+    key: "clear",
+    value: function clear() {
+      this.categories.forEach(function (ctg) {
+        return ctg.clear();
+      });
+      this.categories = [new _Category.default('Uncategorized', 0)];
+    }
+    /**
+     * Moves the transaction with given id to the category with
+     * given name. TODO: If category does not exist, prompt user
+     * if they wish to make a new category.
+     * @param {Number} id 
+     * @param {String} category 
+     * @returns {Transaction} the transaction that was moved.
+     */
+
+  }, {
+    key: "move",
+    value: function move(id, category) {
+      var amount = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+      var old = this.getCategoryOf(id);
+      var target = this.getCategory(category);
+      if (!target) target = this.add(category, amount);
+      var toMove = this.getTransaction(id);
+
+      if (toMove) {
+        old.remove(id);
+        target.add(toMove);
+      }
+
+      return toMove;
+    }
     /**
      * 
-     * @param {Transaction} transaction 
-     * @param {Object} values 
+     * @param {String} category 
+     * @param {Category} options 
+     * @returns {Category} the revised category object
      */
 
   }, {
     key: "edit",
-    value: function edit(transaction, values) {}
+    value: function edit(category) {
+      var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+          name = _ref.name,
+          amount = _ref.amount;
+
+      var edit = this.getCategory(category);
+
+      if (edit) {
+        if (name) edit.name = name;
+        if (amount) edit.budgeted = amount;
+      }
+
+      return edit;
+    }
     /**
      * 
+     * @param {Number} id 
      * @param {Object} options 
+     * @returns {Transactions} the revised transactions object
      */
 
   }, {
-    key: "getTransactions",
-    value: function getTransactions(options) {}
+    key: "editTransaction",
+    value: function editTransaction(id) {
+      var _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+          date = _ref2.date,
+          vendor = _ref2.vendor,
+          amount = _ref2.amount;
+
+      var old = this.getTransaction(id);
+      var ctg = this.getCategoryOf(id);
+
+      if (old) {
+        var edit = new _Transaction.default(old.id, old.date, old.vendor, old.amount);
+        if (date) edit.date = new Date(date);
+        if (vendor) edit.vendor = vendor;
+        if (amount) edit.amount = amount;
+        this.removeTransaction(old.id);
+        this.addTransaction(edit, ctg.name);
+        return edit;
+      }
+
+      return null;
+    }
     /**
-     * Renders the list of transactions onto the DOM node 
-     * specified by target.
-     * @param {Node} target the node to append the rendered 
-     *                      elements to.
+     * Returns the number of categories in this budget.
+     * @returns {Number} the number of categories.
+     */
+
+  }, {
+    key: "size",
+    value: function size() {
+      return this.categories.length;
+    }
+    /**
+     * Checks whether this budget contains the category
+     * with the given name.
+     * @param {String} category the name of the category to look for.
+     * @returns {Boolean} true if this budget contains the given category.
+     */
+
+  }, {
+    key: "contains",
+    value: function contains(category) {
+      var filtered = this.categories.filter(function (ctg) {
+        return ctg.name === category;
+      });
+      return filtered.length > 0;
+    }
+    /**
+     * 
+     * @param {Number} id 
+     * @returns {Boolean}
+     */
+
+  }, {
+    key: "containsTransaction",
+    value: function containsTransaction(id) {
+      return this.categories.filter(function (ctg) {
+        return ctg.contains(id);
+      }).length > 0;
+    }
+    /**
+     * @returns {Category}
+     */
+
+  }, {
+    key: "getDefault",
+    value: function getDefault() {
+      return this.categories[0];
+    }
+    /**
+     * Returns the category with the given name.
+     * @param {String} category 
+     * @returns {Category} the category if found, null otherwise.
+     */
+
+  }, {
+    key: "getCategory",
+    value: function getCategory(category) {
+      var filtered = this.categories.filter(function (ctg) {
+        return ctg.name === category;
+      });
+      return filtered.length > 0 ? filtered[0] : null;
+    }
+    /**
+     * 
+     * @param {Number} id 
+     * @returns {Category} category object containing this transaction.
+     */
+
+  }, {
+    key: "getCategoryOf",
+    value: function getCategoryOf(id) {
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this.categories[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var ctg = _step.value;
+          if (ctg.contains(id)) return ctg;
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return != null) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      return null;
+    }
+    /**
+     * Returns all categories except for 'Uncategorized'.
+     * @returns {Category[]}
+     */
+
+  }, {
+    key: "getAllCategories",
+    value: function getAllCategories() {
+      return this.categories.slice(1);
+    }
+    /**
+     * Returns the number of transactions in the category with
+     * the given name.
+     * @param {String} category name of category to look for
+     * @returns {Number} Size of category, if found. 0 otherwise.
+     */
+
+  }, {
+    key: "getSizeOf",
+    value: function getSizeOf(category) {
+      var ctg = this.getCategory(category);
+      return ctg ? ctg.size() : 0;
+    }
+    /**
+     * 
+     * @param {Number} id 
+     * @returns {Transaction}
+     */
+
+  }, {
+    key: "getTransaction",
+    value: function getTransaction(id) {
+      var container = this.getCategoryOf(id);
+      if (container) return container.getById(id);
+      return null;
+    }
+    /**
+     * Returns all the transactions in every category.
+     * @returns {Transaction[]}
+     */
+
+  }, {
+    key: "getAllTransactions",
+    value: function getAllTransactions() {
+      var result = [];
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
+
+      try {
+        for (var _iterator2 = this.categories[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var ctg = _step2.value;
+          result.push.apply(result, _toConsumableArray(ctg.getTransactions()));
+        }
+      } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+            _iterator2.return();
+          }
+        } finally {
+          if (_didIteratorError2) {
+            throw _iteratorError2;
+          }
+        }
+      }
+
+      return result;
+    }
+    /**
+     * @returns {Number}
+     */
+
+  }, {
+    key: "getNumTransactions",
+    value: function getNumTransactions() {
+      return this.getAllTransactions().length;
+    }
+    /**
+     * Returns all transactions in the category with 
+     * the given name.
+     * @param {String} category name of category to look for
+     * @returns {Transaction[]}
+     */
+
+  }, {
+    key: "getByCategory",
+    value: function getByCategory(category) {
+      var container = this.getCategory(category);
+      return container ? container.getTransactions() : [];
+    }
+    /**
+     * Returns all transactions for the given date in each
+     * category.
+     * @param {String} date Date string we are looking for
+     * @returns {Transaction[]}
+     */
+
+  }, {
+    key: "getByDate",
+    value: function getByDate(date) {
+      var dt = new Date(date);
+      var result = [];
+      var _iteratorNormalCompletion3 = true;
+      var _didIteratorError3 = false;
+      var _iteratorError3 = undefined;
+
+      try {
+        for (var _iterator3 = this.categories[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+          var ctg = _step3.value;
+          result.push.apply(result, _toConsumableArray(ctg.getByDate(dt)));
+        }
+      } catch (err) {
+        _didIteratorError3 = true;
+        _iteratorError3 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
+            _iterator3.return();
+          }
+        } finally {
+          if (_didIteratorError3) {
+            throw _iteratorError3;
+          }
+        }
+      }
+
+      return result;
+    }
+    /**
+     * Returns all transactions in each category with
+     * given vendor.
+     * @param {String} vendor name of vendor
+     * @returns {Transaction[]}
+     */
+
+  }, {
+    key: "getByVendor",
+    value: function getByVendor(vendor) {
+      var result = [];
+      var _iteratorNormalCompletion4 = true;
+      var _didIteratorError4 = false;
+      var _iteratorError4 = undefined;
+
+      try {
+        for (var _iterator4 = this.categories[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+          var ctg = _step4.value;
+          result.push.apply(result, _toConsumableArray(ctg.getByVendor(vendor)));
+        }
+      } catch (err) {
+        _didIteratorError4 = true;
+        _iteratorError4 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion4 && _iterator4.return != null) {
+            _iterator4.return();
+          }
+        } finally {
+          if (_didIteratorError4) {
+            throw _iteratorError4;
+          }
+        }
+      }
+
+      return result;
+      ;
+    }
+    /**
+     * Returns total expenditure in every category.
+     * @returns {Number}
+     */
+
+  }, {
+    key: "getTotalExpenditure",
+    value: function getTotalExpenditure() {
+      return this.categories.reduce(function (acc, ctg) {
+        return acc + ctg.getTotalExpenditure();
+      }, 0);
+    }
+    /**
+     * Returns the remaining amount left in the budget.
+     * @returns {Number}
+     */
+
+  }, {
+    key: "getRemainder",
+    value: function getRemainder() {
+      return this.categories.reduce(function (acc, ctg) {
+        return acc + ctg.budgeted;
+      }, 0) - this.getTotalExpenditure();
+    }
+    /**
+     * 
+     * @param {Element} target 
      */
 
   }, {
     key: "render",
     value: function render(target) {
-      var template = document.getElementById("template--transaction");
-      this.transactions.forEach(function (transaction) {
-        var date = template.content.querySelector(".transaction__date");
-        var dateText = document.createTextNode(transaction.getDate());
-        date.appendChild(dateText);
-        var vendor = template.content.querySelector(".transaction__vendor");
-        var vendorText = document.createTextNode(transaction.vendor);
-        vendor.appendChild(vendorText);
-        var amount = template.content.querySelector(".transaction__amount");
-        var amountNum = document.createTextNode(transaction.amount);
-        amount.appendChild(amountNum);
-        var toMount = document.importNode(template.content, true);
-        target.appendChild(toMount);
+      var remainder = target.querySelector('.remainder--amount');
+      remainder.textContent = "$".concat(this.getRemainder());
+      var ctgsNode = target.querySelector('.category__legend');
+      var ctgs = this.getAllCategories();
+      ctgs.forEach(function (ctg) {
+        var li = document.createElement('li');
+        li.textContent = ctg.name;
+        ctgsNode.appendChild(li);
+      });
+      var trsNode = target.querySelector('.transactions');
+      var transactions = this.getAllTransactions();
+      console.log(transactions);
+      transactions.forEach(function (tr) {
+        tr.render(trsNode);
       });
     }
   }]);
 
-  return Transactions;
+  return Budget;
 }();
 
-exports.default = Transactions;
-},{"./categories":"js/categories.js","./transaction":"js/transaction.js"}],"js/user.js":[function(require,module,exports) {
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _categories = _interopRequireDefault(require("./categories"));
-
-var _transactions = _interopRequireDefault(require("./transactions"));
-
-var _budget = _interopRequireDefault(require("./budget"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var User = function User() {
-  _classCallCheck(this, User);
-};
-
-exports.default = User;
-},{"./categories":"js/categories.js","./transactions":"js/transactions.js","./budget":"js/budget.js"}],"js/main.js":[function(require,module,exports) {
+exports.default = Budget;
+},{"./Category":"js/classes/Category.js","./Transaction":"js/classes/Transaction.js"}],"js/main.js":[function(require,module,exports) {
 'use strict';
 
 require("./../css/main.scss");
 
-var _categories = _interopRequireDefault(require("./categories"));
+var _Budget = _interopRequireDefault(require("./classes/Budget"));
 
-var _budget = _interopRequireDefault(require("./budget"));
+var _Category = _interopRequireDefault(require("./classes/Category"));
 
-var _transactions = _interopRequireDefault(require("./transactions"));
-
-var _transaction = _interopRequireDefault(require("./transaction"));
-
-var _user = _interopRequireDefault(require("./user"));
+var _Transaction = _interopRequireDefault(require("./classes/Transaction"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function main() {
-  var transactions = JSON.parse(localStorage.getItem('transactions'));
-  if (!transactions) transactions = [];
-  var transList = new _transactions.default(transactions);
-  var transContainer = document.querySelector('.transactions');
-  transList.render(transContainer);
+  var bgt = new _Budget.default();
+  bgt.add('Shopping', 150);
+  bgt.add('Food', 600);
+  bgt.addTransaction(new _Transaction.default(0, '14 dec', 'Lululemon', 250), 'Shopping');
+  bgt.addTransaction(new _Transaction.default(1, '14 dec', 'Saveons', 25), 'Food');
+  bgt.render(document.querySelector('#app'));
 }
 
 main();
-},{"./../css/main.scss":"css/main.scss","./categories":"js/categories.js","./budget":"js/budget.js","./transactions":"js/transactions.js","./transaction":"js/transaction.js","./user":"js/user.js"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./../css/main.scss":"css/main.scss","./classes/Budget":"js/classes/Budget.js","./classes/Category":"js/classes/Category.js","./classes/Transaction":"js/classes/Transaction.js"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -432,7 +1079,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54286" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50002" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

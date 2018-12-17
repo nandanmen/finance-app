@@ -24,6 +24,10 @@ export default class Transaction {
         return `${this.date.getDate()}/${this.date.getMonth()+1}`;
     }
 
+    getAmount() {
+        return this.amount.toFixed(2);
+    }
+
     setDate(newDate) {
         this.date = new Date(newDate);
     }
@@ -31,9 +35,17 @@ export default class Transaction {
     /**
      * Renders this transaction onto the DOM
      * node specified by target.
-     * @param {Node} target 
+     * @param {Element} target 
      */
     render(target) {
-
+        const template = document.importNode(document.getElementById('template--transaction').content, true);
+        console.log(template);
+        const date = template.querySelector('.transaction__date');
+        date.textContent = this.getDate();
+        const vendor = template.querySelector('.transaction__vendor');
+        vendor.textContent = this.vendor;
+        const amount = template.querySelector('.transaction__amount');
+        amount.textContent = this.getAmount();
+        target.appendChild(template, true);
     }
 }
