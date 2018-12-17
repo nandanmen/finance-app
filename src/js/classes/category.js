@@ -20,23 +20,15 @@ export default class Category {
     /**
      * Adds a new transaction made with the given
      * parameters into this category.
-     * @param {Transaction} transaction the transaction to be added.
-     *                      This function accepts a single transaction,
-     *                      or an array of transactions.
+     * @param {Transaction} args the transaction(s) to be added.
      */
-    add(transaction) {
-        if (transaction.constructor == Array) {
-            transaction.forEach(tr => {
-                this.addOne.call(this, tr);
-            });
-        } else {
-            this.addOne(transaction);
-        }
+    add(...args) {
+        args.forEach(arg => this.addOne(arg));
     }
 
     /**
      * Adds a single transaction to this category.
-     * @param {Transaction} transaction 
+     * @param {Transaction} transaction the transaction to add.
      */
     addOne(transaction) {
         while (this.contains(transaction.id))
@@ -46,11 +38,25 @@ export default class Category {
 
     /**
      * Removes the transaction with id from this category.
-     * @param {Number} id 
+     * @param {Number} ids the id(s) of the transactions to remove.
      */
-    remove(id) {
-        if (this.contains(id))
+    remove(...ids) {
+        ids.forEach(id => this.removeOne(id));
+    }
+
+    /**
+     * Removes a single transaction from this category.
+     * @param {Number} id the id of the transaction to remove.
+     * @returns {Transaction} the transaction that was removed, if
+     *                        it exists. Null otherwise.
+     */
+    removeOne(id) {
+        if (this.contains(id)) {
+            const toRemove = this.transactions.get(id);
             this.transactions.delete(id);
+            return toRemove;
+        }
+        return null;
     }
 
     /**
@@ -58,12 +64,21 @@ export default class Category {
      * options object passed.
      * @param {Number} id 
      * @param {Object} options 
+     * @returns {Transaction} the revised transaction, if id exists. Returns
+     *                        null otherwise.
      */
     edit(id, { date, vendor, amount } = {}) {
         const tr = this.getById(id);
-        if (date) tr.date = date;
-        if (vendor) tr.vendor = vendor;
-        if (amount) tr.amount = amount;
+        if (tr) {
+            let edit = new Transaction(tr.id, tr.date, tr.vendor, tr.amount);
+            if (date) edit.date = date;
+            if (vendor) edit.vendor = vendor;
+            if (amount) edit.amount = amount;
+            this.remove(tr);
+            this.add(edit);
+            return edit;
+        }
+        return null;
     }
 
     /**

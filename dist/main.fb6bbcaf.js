@@ -300,28 +300,26 @@ function () {
   /**
    * Adds a new transaction made with the given
    * parameters into this category.
-   * @param {Transaction} transaction the transaction to be added.
-   *                      This function accepts a single transaction,
-   *                      or an array of transactions.
+   * @param {Transaction} args the transaction(s) to be added.
    */
 
 
   _createClass(Category, [{
     key: "add",
-    value: function add(transaction) {
+    value: function add() {
       var _this = this;
 
-      if (transaction.constructor == Array) {
-        transaction.forEach(function (tr) {
-          _this.addOne.call(_this, tr);
-        });
-      } else {
-        this.addOne(transaction);
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
       }
+
+      args.forEach(function (arg) {
+        return _this.addOne(arg);
+      });
     }
     /**
      * Adds a single transaction to this category.
-     * @param {Transaction} transaction 
+     * @param {Transaction} transaction the transaction to add.
      */
 
   }, {
@@ -335,19 +333,47 @@ function () {
     }
     /**
      * Removes the transaction with id from this category.
-     * @param {Number} id 
+     * @param {Number} ids the id(s) of the transactions to remove.
      */
 
   }, {
     key: "remove",
-    value: function remove(id) {
-      if (this.contains(id)) this.transactions.delete(id);
+    value: function remove() {
+      var _this2 = this;
+
+      for (var _len2 = arguments.length, ids = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        ids[_key2] = arguments[_key2];
+      }
+
+      ids.forEach(function (id) {
+        return _this2.removeOne(id);
+      });
+    }
+    /**
+     * Removes a single transaction from this category.
+     * @param {Number} id the id of the transaction to remove.
+     * @returns {Transaction} the transaction that was removed, if
+     *                        it exists. Null otherwise.
+     */
+
+  }, {
+    key: "removeOne",
+    value: function removeOne(id) {
+      if (this.contains(id)) {
+        var toRemove = this.transactions.get(id);
+        this.transactions.delete(id);
+        return toRemove;
+      }
+
+      return null;
     }
     /**
      * Edits the transaction with given id based on the
      * options object passed.
      * @param {Number} id 
      * @param {Object} options 
+     * @returns {Transaction} the revised transaction, if id exists. Returns
+     *                        null otherwise.
      */
 
   }, {
@@ -359,9 +385,18 @@ function () {
           amount = _ref.amount;
 
       var tr = this.getById(id);
-      if (date) tr.date = date;
-      if (vendor) tr.vendor = vendor;
-      if (amount) tr.amount = amount;
+
+      if (tr) {
+        var edit = new _Transaction.default(tr.id, tr.date, tr.vendor, tr.amount);
+        if (date) edit.date = date;
+        if (vendor) edit.vendor = vendor;
+        if (amount) edit.amount = amount;
+        this.remove(tr);
+        this.add(edit);
+        return edit;
+      }
+
+      return null;
     }
     /**
      * Returns the number of transactions in
