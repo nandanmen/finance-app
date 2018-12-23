@@ -22,11 +22,19 @@
         </div>
         <div class="category">
             <div class="category__graph"></div>
-            <ul class="category__legend">
-                
-            </ul>
+            <ul class="category__legend"></ul>
+            <div class="category__btn"></div>
         </div>
         <ul class="transactions"></ul>
+        <div class="wrapper--form">
+            <form action="" id="add-ctg">
+                <label for="category">Category name:</label>
+                <input type="text" name="category" id="ctg--name">
+                <label for="amount">Category budget:</label>
+                <input type="number" name="amount" id="ctg--amount">
+                <button class="form--submit">Add category</button>
+            </form>
+        </div>
     </main>
     <script src="../js/main.js"></script>
 </body>

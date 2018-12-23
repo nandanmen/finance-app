@@ -195,7 +195,7 @@ export default class Budget {
      */
     getCategoryOf(id) {
         for (const ctg of this.categories) {
-            if (ctg.contains(id)) return ctg;
+            if (ctg.contains(id)) return new Category(ctg.name, ctg.amount);
         }
         return null;
     }

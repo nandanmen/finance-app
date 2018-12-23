@@ -2,8 +2,6 @@
 
 import Transaction from './Transaction';
 
-const ID_COUNT = 65536;
-
 /**
  * This class represents a category. A category 
  * has a name, budgeted amount and a list of 

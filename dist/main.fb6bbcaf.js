@@ -280,13 +280,11 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var ID_COUNT = 65536;
 /**
  * This class represents a category. A category 
  * has a name, budgeted amount and a list of 
  * transactions pertaining to this category.
  */
-
 var Category =
 /*#__PURE__*/
 function () {
@@ -826,7 +824,7 @@ function () {
       try {
         for (var _iterator = this.categories[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var ctg = _step.value;
-          if (ctg.contains(id)) return ctg;
+          if (ctg.contains(id)) return new _Category.default(ctg.name, ctg.amount);
         }
       } catch (err) {
         _didIteratorError = true;
@@ -1081,6 +1079,20 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function main() {
   var bgt = new _Budget.default();
+  var ctgBtn = document.querySelector(".category__btn");
+  var form = document.getElementById("add-ctg");
+
+  form.submit = function () {
+    var name = document.getElementById("ctg--name").value;
+    var amount = document.getElementById("ctg--amount").value;
+    bgt.add(name, amount);
+    return false;
+  };
+
+  ctgBtn.addEventListener("click", function () {
+    var wrapper = document.querySelector(".wrapper--form");
+    wrapper.style.display = "flex";
+  });
   bgt.add('Shopping', 150);
   bgt.add('Food', 600);
   bgt.addTransaction(new _Transaction.default(0, '14 dec', 'Lululemon', 250), 'Shopping');
@@ -1116,7 +1128,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50002" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56132" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
